@@ -5,210 +5,375 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Travellir — Property Management</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #0f1117; --surface: #181c27; --surface2: #1f2435; --surface3: #252b3b;
-    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
-    --text: #f0f2f8; --muted: #8b91a8; --dim: #555c72;
-    --amber: #f0a030; --amber-soft: rgba(240,160,48,0.12);
-    --amber-dim: rgba(240,160,48,0.06);
-    --red: #e05252; --red-soft: rgba(224,82,82,0.12);
-    --green: #4caf7d; --green-soft: rgba(76,175,125,0.12);
-    --blue: #5b8ff9; --blue-soft: rgba(91,143,249,0.12);
-    --radius: 10px; --radius-lg: 14px; --radius-xl: 18px;
-    --sidebar: 220px;
-    --font: 'DM Sans', system-ui, sans-serif;
-    --mono: 'DM Mono', monospace;
+    --bg: #f5f6fa; --surface: #ffffff; --surface2: #f0f1f5; --surface3: #e8eaf0;
+    --border: rgba(26,39,68,0.08); --border2: rgba(26,39,68,0.12); --border-glow: rgba(201,168,76,0.18);
+    --text: #1a2744; --muted: #64748b; --dim: #94a3b8;
+    --amber: #c9a84c; --amber-light: #e0c76e; --amber-soft: rgba(201,168,76,0.08);
+    --amber-dim: rgba(201,168,76,0.04); --amber-glow: rgba(201,168,76,0.12);
+    --navy: #1a2744; --navy-light: #2a3a5c;
+    --red: #ef4444; --red-soft: rgba(239,68,68,0.06);
+    --green: #16a34a; --green-soft: rgba(22,163,74,0.06);
+    --blue: #2563eb; --blue-soft: rgba(37,99,235,0.06);
+    --radius: 8px; --radius-lg: 12px; --radius-xl: 16px;
+    --sidebar-bg: #111827; --sidebar-border: rgba(255,255,255,0.06);
+    --sidebar-text: #e2e8f0; --sidebar-muted: #8896ab; --sidebar-dim: #4b5a70;
+    --sidebar: 240px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+    --shadow-glow: 0 0 20px rgba(201,168,76,0.08);
   }
-  html, body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+  html, body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'; }
+  img, svg { display: block; max-width: 100%; }
+  ::selection { background: rgba(201,168,76,0.25); color: var(--navy); }
+
+  /* ANIMATIONS */
+  @keyframes meshMove { 0%,100% { background-position: 0% 0%, 100% 100%; } 50% { background-position: 100% 0%, 0% 100%; } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes glowPulse { 0%,100% { box-shadow: 0 0 12px rgba(201,168,76,0.15); } 50% { box-shadow: 0 0 24px rgba(201,168,76,0.3); } }
 
   /* LAYOUT */
   #app { display: flex; height: 100vh; overflow: hidden; }
 
   /* LOGIN */
-  #loginScreen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 100; flex-direction: column; gap: 0; }
-  .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 48px 40px; width: 380px; }
-  .login-logo { font-size: 26px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px; }
-  .login-logo span { color: var(--amber); }
-  .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
-  .form-group { margin-bottom: 16px; }
-  .form-label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px; display: block; }
-  .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 10px 14px; font-size: 14px; font-family: var(--font); color: var(--text); outline: none; transition: border-color 0.15s; }
-  .form-input:focus { border-color: var(--amber); }
-  .btn-primary { width: 100%; background: var(--amber); color: #0f1117; font-family: var(--font); font-size: 14px; font-weight: 600; border: none; border-radius: var(--radius); padding: 11px; cursor: pointer; margin-top: 8px; transition: opacity 0.15s; }
-  .btn-primary:hover { opacity: 0.88; }
-  .login-hint { font-size: 12px; color: var(--dim); text-align: center; margin-top: 14px; }
+  #loginScreen { position: fixed; inset: 0; background: linear-gradient(145deg, #0f1728, #1a2744); display: flex; align-items: center; justify-content: center; z-index: 100; flex-direction: column; gap: 0; transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+  #loginScreen::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201,168,76,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 80%, rgba(201,168,76,0.04) 0%, transparent 60%); pointer-events: none; animation: meshMove 20s ease infinite; background-size: 200% 200%, 200% 200%; }
+  #loginScreen.hiding { opacity: 0; transform: scale(0.98); }
+  .login-card { background: rgba(255,255,255,0.97); border: none; border-radius: var(--radius-xl); padding: 52px 44px; width: 440px; box-shadow: 0 24px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1) inset; backdrop-filter: blur(20px); position: relative; z-index: 1; animation: fadeInUp 0.6s ease; color: var(--navy); }
+  .login-logo { font-size: 30px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; color: var(--navy); }
+  .login-logo span { background: linear-gradient(135deg, var(--amber), #b8963f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .login-logo-mark { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--amber), #b8963f); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(201,168,76,0.35); animation: glowPulse 3s ease infinite; }
+  .login-logo-mark svg { width: 26px; height: 26px; }
+  .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 40px; letter-spacing: -0.1px; }
+  .form-group { margin-bottom: 20px; }
+  .form-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .form-input { width: 100%; background: #f5f6fa; border: 1px solid rgba(26,39,68,0.12); border-radius: var(--radius); padding: 12px 16px; font-size: 14px; font-family: var(--font); color: var(--navy); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  .form-input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+  .btn-primary { width: 100%; background: linear-gradient(135deg, var(--amber), #b8963f); color: #fff; font-family: var(--font); font-size: 14px; font-weight: 800; border: none; border-radius: var(--radius); padding: 13px; cursor: pointer; margin-top: 12px; transition: transform 0.15s, box-shadow 0.2s; box-shadow: 0 4px 16px rgba(201,168,76,0.3); letter-spacing: -0.2px; position: relative; overflow: hidden; }
+  .btn-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); background-size: 200% 100%; animation: shimmer 3s ease infinite; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+  .login-hint { font-size: 12px; color: var(--dim); text-align: center; margin-top: 18px; letter-spacing: -0.1px; }
 
-  /* SIDEBAR */
-  #sidebar { width: var(--sidebar); min-width: var(--sidebar); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-  .sidebar-top { padding: 20px 16px 14px; border-bottom: 1px solid var(--border); }
-  .s-logo { font-size: 17px; font-weight: 600; letter-spacing: -0.4px; }
-  .s-logo span { color: var(--amber); }
-  .s-account { font-size: 11px; color: var(--dim); margin-top: 3px; }
-  .nav-section { padding: 12px 10px 6px; }
-  .nav-label { font-size: 10px; font-weight: 500; color: var(--dim); letter-spacing: 0.8px; text-transform: uppercase; padding: 0 8px; margin-bottom: 4px; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius); cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 400; transition: all 0.12s; margin-bottom: 1px; }
-  .nav-item:hover { background: var(--surface2); color: var(--text); }
-  .nav-item.active { background: var(--amber-soft); color: var(--amber); font-weight: 500; }
-  .nav-icon { font-size: 15px; width: 18px; text-align: center; }
-  .nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 10px; }
-  .sidebar-bottom { margin-top: auto; padding: 14px 16px; border-top: 1px solid var(--border); }
+  /* SIDEBAR — kept dark navy for premium contrast */
+  #sidebar { width: var(--sidebar); min-width: var(--sidebar); background: var(--sidebar-bg); border-right: 1px solid var(--sidebar-border); display: flex; flex-direction: column; overflow: hidden; position: relative; color: var(--sidebar-text); }
+  #sidebar::after { content: ''; position: absolute; top: 0; right: 0; width: 1px; height: 100%; background: linear-gradient(to bottom, rgba(201,168,76,0.1) 0%, transparent 30%, transparent 70%, rgba(201,168,76,0.05) 100%); pointer-events: none; }
+  .sidebar-top { padding: 22px 20px 18px; border-bottom: 1px solid var(--sidebar-border); }
+  .s-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.6px; display: flex; align-items: center; gap: 10px; color: var(--sidebar-text); }
+  .s-logo span { background: linear-gradient(135deg, var(--amber), var(--amber-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .s-logo-mark { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, var(--amber), #b8963f); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(201,168,76,0.3); flex-shrink: 0; }
+  .s-logo-mark svg { width: 15px; height: 15px; }
+  .s-account { font-size: 11px; color: var(--sidebar-muted); margin-top: 4px; margin-left: 38px; letter-spacing: -0.1px; }
+  .nav-section { padding: 16px 12px 6px; }
+  .nav-label { font-size: 9px; font-weight: 700; color: var(--sidebar-dim); letter-spacing: 1.5px; text-transform: uppercase; padding: 0 10px; margin-bottom: 8px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius); cursor: pointer; color: var(--sidebar-muted); font-size: 13px; font-weight: 500; transition: all 0.2s cubic-bezier(0.16,1,0.3,1); margin-bottom: 2px; letter-spacing: -0.1px; position: relative; }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: var(--sidebar-text); transform: translateX(2px); }
+  .nav-item.active { background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.05)); color: var(--amber); font-weight: 600; }
+  .nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 18px; background: linear-gradient(to bottom, var(--amber), #b8963f); border-radius: 0 3px 3px 0; box-shadow: 0 0 8px rgba(201,168,76,0.3); }
+  .nav-icon { width: 20px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .nav-icon svg { display: inline-block; vertical-align: middle; }
+  .nav-badge { margin-left: auto; background: linear-gradient(135deg, var(--red), #dc2626); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; letter-spacing: 0.2px; box-shadow: 0 2px 6px rgba(239,68,68,0.3); }
+  .sidebar-bottom { margin-top: auto; padding: 18px 20px; border-top: 1px solid var(--sidebar-border); }
   .user-row { display: flex; align-items: center; gap: 10px; }
-  .user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--amber-soft); border: 1px solid var(--amber); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--amber); flex-shrink: 0; }
-  .user-name { font-size: 12px; font-weight: 500; }
-  .user-role { font-size: 10px; color: var(--dim); }
+  .user-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.06)); border: 1.5px solid rgba(201,168,76,0.4); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--amber); flex-shrink: 0; }
+  .user-name { font-size: 13px; font-weight: 700; letter-spacing: -0.2px; color: var(--sidebar-text); }
+  .user-role { font-size: 11px; color: var(--sidebar-dim); letter-spacing: -0.1px; }
 
   /* MAIN */
-  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-  .top-bar { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface); flex-shrink: 0; }
-  .page-title { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
-  .page-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); position: relative; }
+  .top-bar { padding: 18px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface); flex-shrink: 0; position: relative; z-index: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .page-title { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .page-sub { font-size: 12px; color: var(--muted); margin-top: 3px; letter-spacing: -0.1px; }
   .top-actions { display: flex; gap: 10px; align-items: center; }
-  .btn-sm { font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: var(--radius); cursor: pointer; border: 1px solid var(--border2); background: var(--surface2); color: var(--text); font-family: var(--font); transition: all 0.12s; }
-  .btn-sm:hover { background: var(--surface3); }
-  .btn-amber { background: var(--amber); color: #0f1117; border-color: var(--amber); }
-  .btn-amber:hover { opacity: 0.88; background: var(--amber); }
-  .page-content { flex: 1; overflow-y: auto; padding: 24px; }
+  .btn-sm { font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: var(--radius); cursor: pointer; border: 1px solid var(--border2); background: var(--surface); color: var(--text); font-family: var(--font); transition: all 0.2s cubic-bezier(0.16,1,0.3,1); letter-spacing: -0.1px; }
+  .btn-sm:hover { background: var(--surface2); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .btn-amber { background: linear-gradient(135deg, var(--amber), #b8963f); color: #fff; border-color: transparent; font-weight: 700; box-shadow: 0 2px 8px rgba(201,168,76,0.25); }
+  .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,168,76,0.35); background: linear-gradient(135deg, var(--amber), #b8963f); }
+  .page-content { flex: 1; overflow-y: auto; padding: 28px; position: relative; z-index: 1; }
 
   /* TABS */
   .tab-row { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
-  .tab-btn { padding: 10px 16px; font-size: 13px; font-weight: 400; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.12s; background: none; border-top: none; border-left: none; border-right: none; font-family: var(--font); }
+  .tab-btn { padding: 11px 20px; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; font-family: var(--font); letter-spacing: -0.1px; }
   .tab-btn:hover { color: var(--text); }
-  .tab-btn.active { color: var(--amber); border-bottom-color: var(--amber); font-weight: 500; }
+  .tab-btn.active { color: var(--amber); border-bottom-color: var(--amber); font-weight: 700; }
 
   /* CARDS & GRIDS */
   .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; }
-  .stat-val { font-size: 26px; font-weight: 600; letter-spacing: -0.5px; }
-  .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat-change { font-size: 11px; margin-top: 6px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--shadow-sm); transition: all 0.25s cubic-bezier(0.16,1,0.3,1); position: relative; overflow: hidden; }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .stat-val { font-size: 30px; font-weight: 800; letter-spacing: -1px; font-variant-numeric: tabular-nums; color: var(--navy); }
+  .stat-label { font-size: 10px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600; }
+  .stat-change { font-size: 11px; margin-top: 10px; font-weight: 600; }
   .up { color: var(--green); } .down { color: var(--red); }
 
   /* PROPERTY LIST */
   .prop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .prop-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; cursor: pointer; transition: all 0.15s; }
-  .prop-card:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-1px); }
+  .prop-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; cursor: pointer; transition: all 0.25s cubic-bezier(0.16,1,0.3,1); box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+  .prop-card:hover { border-color: var(--border-glow); transform: translateY(-3px); box-shadow: var(--shadow-md), var(--shadow-glow); }
   .prop-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
-  .prop-name { font-size: 14px; font-weight: 600; }
-  .prop-addr { font-size: 11px; color: var(--muted); margin-top: 3px; }
-  .status-pill { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; flex-shrink: 0; }
+  .prop-name { font-size: 14px; font-weight: 700; letter-spacing: -0.2px; }
+  .prop-addr { font-size: 11px; color: var(--muted); margin-top: 3px; letter-spacing: -0.1px; }
+  .status-pill { font-size: 9px; font-weight: 800; padding: 4px 10px; border-radius: 20px; flex-shrink: 0; letter-spacing: 0.5px; text-transform: uppercase; }
   .pill-ok { background: var(--green-soft); color: var(--green); }
-  .pill-warn { background: var(--amber-soft); color: var(--amber); }
-  .pill-alert { background: var(--red-soft); color: var(--red); }
+  .pill-warn { background: var(--amber-soft); color: #a08930; }
+  .pill-alert { background: var(--red-soft); color: var(--red); animation: pulse 2s ease infinite; }
   .prop-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-  .prop-stat-val { font-size: 15px; font-weight: 600; }
-  .prop-stat-label { font-size: 10px; color: var(--dim); margin-top: 1px; }
-  .prop-issues-row { display: flex; gap: 6px; margin-top: 10px; }
-  .issue-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .prop-stat-val { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--navy); }
+  .prop-stat-label { font-size: 9px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
+  .prop-issues-row { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .issue-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 4px currentColor; }
 
   /* SECTION HEADERS */
   .section-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .section-title { font-size: 13px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; }
+  .section-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; }
 
   /* ISSUE CARDS */
   .issue-list { display: flex; flex-direction: column; gap: 8px; }
-  .issue-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; display: flex; gap: 14px; align-items: flex-start; }
-  .issue-icon-wrap { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .issue-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; transition: all 0.2s; box-shadow: var(--shadow-sm); }
+  .issue-item:hover { transform: translateX(2px); box-shadow: var(--shadow-md); }
+  .issue-icon-wrap { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
   .i-warn { background: var(--amber-soft); }
   .i-alert { background: var(--red-soft); }
   .i-ok { background: var(--green-soft); }
   .i-info { background: var(--blue-soft); }
   .issue-body { flex: 1; }
-  .issue-title { font-size: 14px; font-weight: 500; }
+  .issue-title { font-size: 14px; font-weight: 600; }
   .issue-desc { font-size: 12px; color: var(--muted); margin-top: 3px; }
   .issue-meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-  .tag { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
-  .tag-open { background: var(--amber-soft); color: var(--amber); }
+  .tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+  .tag-open { background: var(--amber-soft); color: #a08930; }
   .tag-done { background: var(--green-soft); color: var(--green); }
   .tag-prog { background: var(--blue-soft); color: var(--blue); }
   .tag-text { font-size: 11px; color: var(--dim); }
   .issue-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
   .issue-date { font-size: 11px; color: var(--dim); }
-  .resolve-btn { font-size: 11px; padding: 4px 10px; border-radius: 6px; background: var(--green-soft); color: var(--green); border: none; cursor: pointer; font-family: var(--font); font-weight: 500; }
-  .resolve-btn:hover { opacity: 0.8; }
+  .resolve-btn { font-size: 11px; padding: 5px 12px; border-radius: 6px; background: var(--green-soft); color: var(--green); border: 1px solid rgba(22,163,74,0.15); cursor: pointer; font-family: var(--font); font-weight: 600; transition: all 0.15s; }
+  .resolve-btn:hover { background: rgba(22,163,74,0.1); transform: translateY(-1px); }
 
   /* VENDOR CARDS */
   .vendor-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .vendor-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
-  .v-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--blue-soft); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--blue); flex-shrink: 0; }
-  .v-name { font-size: 14px; font-weight: 500; }
+  .vendor-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; display: flex; align-items: center; gap: 12px; transition: all 0.2s; box-shadow: var(--shadow-sm); }
+  .vendor-item:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .v-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04)); border: 1px solid rgba(201,168,76,0.2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #a08930; flex-shrink: 0; }
+  .v-name { font-size: 14px; font-weight: 600; }
   .v-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .v-phone { font-size: 12px; color: var(--blue); margin-left: auto; }
+  .v-phone { font-size: 12px; color: var(--blue); margin-left: auto; font-weight: 500; }
   .v-last { font-size: 10px; color: var(--dim); }
 
   /* CALENDAR */
-  .cal-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
+  .cal-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow-sm); }
   .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .cal-month { font-size: 15px; font-weight: 600; }
+  .cal-month { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
   .cal-nav { display: flex; gap: 6px; }
-  .cal-nav-btn { width: 28px; height: 28px; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .cal-nav-btn { width: 30px; height: 30px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .cal-nav-btn:hover { background: var(--surface3); color: var(--text); }
   .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-  .cal-day-hdr { font-size: 10px; font-weight: 500; color: var(--dim); text-align: center; padding: 4px 0; text-transform: uppercase; }
-  .cal-cell { aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; cursor: default; }
+  .cal-day-hdr { font-size: 10px; font-weight: 700; color: var(--muted); text-align: center; padding: 6px 0; text-transform: uppercase; letter-spacing: 0.8px; }
+  .cal-cell { aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; cursor: default; transition: all 0.15s; }
+  .cal-cell:hover { background: var(--surface2); }
   .cal-num { font-size: 12px; font-weight: 500; }
   .cal-empty { }
   .cal-avail { color: var(--muted); }
-  .cal-booked { background: var(--amber-soft); color: var(--amber); font-weight: 600; }
+  .cal-booked { background: rgba(201,168,76,0.1); color: #a08930; font-weight: 600; }
   .cal-maint { background: var(--red-soft); color: var(--red); }
-  .cal-today { box-shadow: inset 0 0 0 1.5px var(--amber); color: var(--text); }
+  .cal-today { box-shadow: inset 0 0 0 2px var(--amber); color: var(--text); font-weight: 700; }
   .cal-legend { display: flex; gap: 16px; margin-top: 14px; }
   .leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
-  .leg-box { width: 12px; height: 12px; border-radius: 3px; }
-  .next-booking { background: var(--surface2); border-radius: var(--radius); padding: 14px 16px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; }
-  .nb-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
-  .nb-val { font-size: 14px; font-weight: 500; }
+  .leg-box { width: 12px; height: 12px; border-radius: 4px; }
+  .next-booking { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .nb-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; font-weight: 600; }
+  .nb-val { font-size: 14px; font-weight: 600; color: var(--navy); }
 
   /* PROPERTY DETAIL */
-  .detail-header { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
-  .back-btn { font-size: 12px; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-  .back-btn:hover { color: var(--text); }
-  .detail-name { font-size: 20px; font-weight: 600; letter-spacing: -0.4px; }
+  .detail-header { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 26px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm); }
+  .back-btn { font-size: 12px; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; transition: color 0.15s; }
+  .back-btn:hover { color: var(--amber); }
+  .detail-name { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--navy); }
   .detail-addr { font-size: 13px; color: var(--muted); margin-top: 3px; }
-  .detail-stats { display: flex; gap: 28px; }
+  .detail-stats { display: flex; gap: 32px; }
   .ds { text-align: right; }
-  .ds-val { font-size: 18px; font-weight: 600; }
-  .ds-label { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .ds-val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--navy); }
+  .ds-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
 
   /* MODAL */
-  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 200; }
-  .modal-box { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-xl); padding: 28px; width: 420px; }
-  .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 20px; }
-  .modal-form-group { margin-bottom: 14px; }
-  .modal-label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 6px; display: block; text-transform: uppercase; }
-  .modal-input { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 9px 13px; font-size: 13px; font-family: var(--font); color: var(--text); outline: none; transition: border-color 0.15s; }
-  .modal-input:focus { border-color: var(--amber); }
-  .modal-select { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 9px 13px; font-size: 13px; font-family: var(--font); color: var(--text); outline: none; }
-  .modal-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 9px 13px; font-size: 13px; font-family: var(--font); color: var(--text); outline: none; resize: vertical; min-height: 72px; }
-  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-  .btn-cancel { font-size: 13px; padding: 8px 16px; border-radius: var(--radius); background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; font-family: var(--font); }
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 200; animation: fadeIn 0.15s ease; }
+  .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 32px; width: 440px; box-shadow: var(--shadow-lg); animation: slideDown 0.2s cubic-bezier(0.16,1,0.3,1); }
+  .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.3px; color: var(--navy); }
+  .modal-form-group { margin-bottom: 16px; }
+  .modal-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 6px; display: block; text-transform: uppercase; }
+  .modal-input { width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; font-family: var(--font); color: var(--text); outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+  .modal-input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(201,168,76,0.08); }
+  .modal-select { width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; font-family: var(--font); color: var(--text); outline: none; }
+  .modal-textarea { width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; font-family: var(--font); color: var(--text); outline: none; resize: vertical; min-height: 80px; }
+  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+  .btn-cancel { font-size: 13px; padding: 9px 18px; border-radius: var(--radius); background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; font-family: var(--font); transition: all 0.15s; }
+  .btn-cancel:hover { background: var(--surface2); color: var(--text); }
 
   /* DASHBOARD SPECIFIC */
-  .alerts-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 20px; }
-  .alert-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .alerts-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+  .alert-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); transition: all 0.15s; }
+  .alert-row:hover { padding-left: 4px; }
   .alert-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .alert-text { font-size: 13px; flex: 1; }
-  .alert-prop { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 4px currentColor; }
+  .alert-text { font-size: 13px; flex: 1; font-weight: 500; }
+  .alert-prop { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .alert-time { font-size: 11px; color: var(--dim); flex-shrink: 0; }
 
   /* MARKET FILTER */
   .market-filter { display: flex; gap: 6px; margin-bottom: 20px; }
-  .mf-btn { font-size: 12px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: var(--font); transition: all 0.12s; }
+  .mf-btn { font-size: 12px; padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: var(--font); transition: all 0.2s; font-weight: 500; }
   .mf-btn:hover { background: var(--surface2); color: var(--text); }
-  .mf-btn.active { background: var(--amber-soft); color: var(--amber); border-color: var(--amber); }
+  .mf-btn.active { background: linear-gradient(135deg, rgba(245,166,35,0.12), rgba(245,166,35,0.06)); color: var(--amber); border-color: rgba(245,166,35,0.3); box-shadow: 0 0 10px rgba(245,166,35,0.08); font-weight: 600; }
 
   /* EMPTY */
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--dim); font-size: 13px; }
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--dim); font-size: 13px; }
 
   /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: rgba(31,37,54,0.8); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
 
   /* TOAST */
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface3); border: 1px solid var(--border2); border-radius: var(--radius); padding: 12px 18px; font-size: 13px; z-index: 300; opacity: 0; transform: translateY(8px); transition: all 0.2s; pointer-events: none; }
-  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast { position: fixed; bottom: 28px; right: 28px; background: rgba(28,33,48,0.9); border: 1px solid var(--border2); border-radius: var(--radius); padding: 14px 22px; font-size: 13px; font-weight: 600; z-index: 300; opacity: 0; transform: translateY(12px) scale(0.95); transition: all 0.3s cubic-bezier(0.16,1,0.3,1); pointer-events: none; box-shadow: var(--shadow-lg); backdrop-filter: blur(16px); }
+  .toast.show { opacity: 1; transform: translateY(0) scale(1); }
+
+  /* Crisp focus & transitions */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, input, select, textarea { font-family: var(--font); }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+
+  /* ─── MOBILE HAMBURGER ─── */
+  .mobile-toggle { display: none; width: 40px; height: 40px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); cursor: pointer; align-items: center; justify-content: center; flex-shrink: 0; z-index: 50; }
+  .mobile-toggle svg { width: 18px; height: 18px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 49; }
+
+  /* ─── TABLET: 1024px ─── */
+  @media (max-width: 1024px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .prop-grid { grid-template-columns: repeat(2, 1fr); }
+    .vendor-grid { grid-template-columns: 1fr; }
+    .detail-stats { gap: 20px; flex-wrap: wrap; }
+  }
+
+  /* ─── MOBILE: 768px ─── */
+  @media (max-width: 768px) {
+    :root { --sidebar: 280px; }
+
+    /* Sidebar: hidden off-screen, slides in */
+    #sidebar { position: fixed; left: calc(-1 * var(--sidebar)); top: 0; bottom: 0; z-index: 50; transition: left 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow: none; }
+    #sidebar.open { left: 0; box-shadow: 8px 0 30px rgba(0,0,0,0.2); }
+    .sidebar-overlay.show { display: block; }
+
+    /* Hamburger visible */
+    .mobile-toggle { display: flex; }
+
+    /* Top bar */
+    .top-bar { padding: 14px 18px; gap: 10px; }
+    .page-title { font-size: 16px; }
+    .top-actions { gap: 6px; }
+    .btn-sm { padding: 7px 12px; font-size: 11px; }
+
+    /* Content */
+    .page-content { padding: 18px; }
+
+    /* Stats */
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
+    .stat-card { padding: 16px 18px; }
+    .stat-val { font-size: 24px; }
+    .stat-label { font-size: 9px; }
+
+    /* Properties */
+    .prop-grid { grid-template-columns: 1fr; gap: 10px; }
+    .prop-card { padding: 18px 20px; }
+    .prop-stats { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+
+    /* Market section */
+    .market-filter { flex-wrap: wrap; gap: 6px; }
+    .mf-btn { padding: 6px 14px; font-size: 11px; }
+
+    /* Calendar */
+    .cal-wrapper { padding: 16px; }
+    .cal-cell { border-radius: 6px; }
+    .cal-num { font-size: 11px; }
+    .cal-day-hdr { font-size: 9px; padding: 4px 0; }
+    .cal-legend { flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .next-booking { padding: 12px 14px; flex-direction: column; gap: 10px; align-items: flex-start; }
+
+    /* Dashboard grid → stacked */
+    .page-content > div:last-child[style*="grid-template-columns: 1fr 1fr"] { display: block !important; }
+    .page-content > div:last-child[style*="grid-template-columns: 1fr 1fr"] > div { margin-bottom: 20px; }
+
+    /* Alerts */
+    .alert-row { flex-wrap: wrap; gap: 8px; }
+    .alert-time { width: 100%; text-align: right; margin-top: -4px; }
+
+    /* Detail view */
+    .detail-header { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px 20px; }
+    .detail-stats { width: 100%; justify-content: space-between; }
+    .ds-val { font-size: 16px; }
+    .detail-name { font-size: 18px; }
+
+    /* Tabs */
+    .tab-row { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .tab-row::-webkit-scrollbar { display: none; }
+    .tab-btn { white-space: nowrap; padding: 10px 16px; font-size: 12px; }
+
+    /* Issues */
+    .issue-item { padding: 14px 16px; }
+    .issue-right { flex-direction: row; gap: 10px; align-items: center; }
+
+    /* Vendors */
+    .vendor-grid { grid-template-columns: 1fr; }
+
+    /* Guest Comms — stack on mobile */
+    .page-content > div[style*="grid-template-columns:280px"] { grid-template-columns: 1fr !important; height: auto !important; }
+    .page-content > div[style*="grid-template-columns:280px"] > div:first-child { max-height: 200px; border-right: none !important; border-bottom: 1px solid var(--border); }
+
+    /* Modal */
+    .modal-box { width: calc(100vw - 32px); max-width: 440px; padding: 24px; margin: 16px; }
+
+    /* Toast */
+    .toast { left: 16px; right: 16px; bottom: 16px; text-align: center; }
+
+    /* Login */
+    .login-card { width: calc(100vw - 32px); max-width: 440px; padding: 36px 28px; }
+    .login-card img { height: 60px !important; }
+  }
+
+  /* ─── SMALL MOBILE: 480px ─── */
+  @media (max-width: 480px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-card { padding: 14px 16px; }
+    .stat-val { font-size: 22px; }
+
+    .page-content { padding: 14px; }
+    .top-bar { padding: 12px 14px; }
+    .page-title { font-size: 15px; }
+
+    .prop-card { padding: 16px; }
+    .prop-name { font-size: 13px; }
+
+    .cal-grid { gap: 2px; }
+    .cal-cell { border-radius: 4px; }
+
+    .login-card { padding: 28px 20px; }
+    .login-card img { height: 50px !important; }
+    .login-sub { font-size: 12px; margin-bottom: 28px; }
+    .form-input { padding: 11px 14px; font-size: 13px; }
+    .btn-primary { padding: 12px; font-size: 13px; }
+
+    .detail-stats { flex-wrap: wrap; gap: 12px; }
+    .ds { text-align: left; }
+  }
 </style>
 </head>
 <body>
@@ -216,8 +381,8 @@
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-logo">Travell<span>ir</span></div>
-    <div class="login-sub">Property & Vendor Management · Powered by Blueprint AI</div>
+    <div style="margin-bottom:8px;"><img src="Travellir-logo.png.webp" alt="Traveliir" style="height:80px;width:auto;"></div>
+    <div class="login-sub">Premier Rentals · Property & Vendor Management</div>
     <div class="form-group">
       <label class="form-label">Email</label>
       <input class="form-input" type="email" value="jerell@travellermanagement.com" />
@@ -234,31 +399,35 @@
 <!-- APP -->
 <div id="app" style="display:none;">
 
+  <!-- SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sidebar-top">
-      <div class="s-logo">Travell<span>ir</span></div>
-      <div class="s-account">travellermanagement.com</div>
+      <div class="s-logo"><div class="s-logo-mark"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7" fill="none" stroke="#06080d" stroke-width="1.5"/><ellipse cx="12" cy="13" rx="3" ry="7" fill="none" stroke="#06080d" stroke-width="1"/><line x1="5" y1="13" x2="19" y2="13" stroke="#06080d" stroke-width="0.8"/><path d="M17 5L20 3L19 6L17 5Z" fill="#06080d"/><path d="M10 6C12 4 16 3 20 3" fill="none" stroke="#06080d" stroke-width="1.2" stroke-linecap="round"/></svg></div>Travel<span>iir</span></div>
+      <div class="s-account">Premier Rentals</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Overview</div>
-      <div class="nav-item active" onclick="nav('dashboard',this)"><span class="nav-icon">⊞</span> Dashboard</div>
-      <div class="nav-item" onclick="nav('properties',this)"><span class="nav-icon">🏠</span> Properties <span class="nav-badge" id="alertBadge">3</span></div>
+      <div class="nav-item active" onclick="nav('dashboard',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg></span> Dashboard</div>
+      <div class="nav-item" onclick="nav('properties',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6.5L8 2l6 4.5V14H2V6.5z"/><path d="M6 14V9h4v5"/></svg></span> Properties <span class="nav-badge" id="alertBadge">3</span></div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Operations</div>
-      <div class="nav-item" onclick="nav('issues',this)"><span class="nav-icon">🔧</span> Maintenance Log</div>
-      <div class="nav-item" onclick="nav('vendors',this)"><span class="nav-icon">👥</span> Vendors</div>
-      <div class="nav-item" onclick="nav('calendar',this)"><span class="nav-icon">📅</span> Booking Calendar</div>
+      <div class="nav-item" onclick="nav('issues',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5"/></svg></span> Maintenance Log</div>
+      <div class="nav-item" onclick="nav('vendors',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5.5" cy="5" r="2.5"/><circle cx="10.5" cy="5" r="2.5"/><path d="M1 14c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/><path d="M10.5 10c2.5 0 4.5 1.5 4.5 4"/></svg></span> Vendors</div>
+      <div class="nav-item" onclick="nav('calendar',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="2.5" width="13" height="12" rx="2"/><path d="M1.5 6.5h13"/><path d="M5 1v3M11 1v3"/></svg></span> Booking Calendar</div>
+      <div class="nav-item" onclick="nav('cleaning',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1v4M4.5 2.5l2 3M11.5 2.5l-2 3"/><rect x="3" y="6" width="10" height="8" rx="2"/><path d="M6 9v2M10 9v2"/></svg></span> Cleaning <span class="nav-badge" style="background:var(--green);">NEW</span></div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Guest Experience</div>
-      <div class="nav-item" onclick="nav('guestcomms',this)"><span class="nav-icon">💬</span> Guest Comms AI <span class="nav-badge" style="background:var(--green);">NEW</span></div>
+      <div class="nav-item" onclick="nav('guestcomms',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h12v8H5l-3 3V3z" rx="2"/><circle cx="5.5" cy="7" r="0.5" fill="currentColor"/><circle cx="8" cy="7" r="0.5" fill="currentColor"/><circle cx="10.5" cy="7" r="0.5" fill="currentColor"/></svg></span> Guest Comms AI <span class="nav-badge" style="background:var(--green);">NEW</span></div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Business</div>
-      <div class="nav-item" onclick="nav('owners',this)"><span class="nav-icon">📋</span> Owner Portal</div>
-      <div class="nav-item" onclick="nav('reports',this)"><span class="nav-icon">📊</span> Reports</div>
+      <div class="nav-item" onclick="nav('owners',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="1" width="12" height="14" rx="2"/><path d="M5 5h6M5 8h6M5 11h3"/></svg></span> Owner Portal</div>
+      <div class="nav-item" onclick="nav('reports',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 14V8h3v6"/><path d="M6.5 14V5h3v9"/><path d="M11 14V2h3v12"/></svg></span> Reports</div>
     </div>
     <div class="sidebar-bottom">
       <div class="user-row">
@@ -274,9 +443,14 @@
   <!-- MAIN -->
   <div id="main">
     <div class="top-bar">
-      <div>
-        <div class="page-title" id="pageTitle">Dashboard</div>
-        <div class="page-sub" id="pageSub">Good morning, Jerell — here's what needs your attention today.</div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+          <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <div class="page-title" id="pageTitle">Dashboard</div>
+          <div class="page-sub" id="pageSub">Good morning, Jerell — here's what needs your attention today.</div>
+        </div>
       </div>
       <div class="top-actions">
         <button class="btn-sm" onclick="showModal('issue')">+ Log Issue</button>
@@ -296,6 +470,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ─── MOBILE SIDEBAR ──────────────────────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
 // ─── DATA ─────────────────────────────────────────────────────────────
 const PROPERTIES = [
   {
@@ -311,7 +495,13 @@ const PROPERTIES = [
       { name:'Roto-Rooter WV', role:'Plumber', phone:'304-555-0198', initials:'RR', last:'Apr 8' },
       { name:'Xfinity Support', role:'Internet', phone:'1-800-934-6489', initials:'XF', last:'Apr 10' },
     ],
-    booked:[1,2,3,4,8,9,14,15,16,17,18,22,23,28,29,30], maint:[13]
+    booked:[14,15,16,17,22,23,24,25,28,29,30], maint:[13],
+    bookings:[
+      {start:14,end:17,guest:'The Johnson Family',channel:'VRBO',guests:4},
+      {start:22,end:25,guest:'Mark & Lisa T.',channel:'Direct',guests:2},
+      {start:28,end:30,guest:'Chen Party of 3',channel:'VRBO',guests:3}
+    ],
+    maintDetails:[{day:13,label:'Deep Clean — Maria S.'}]
   },
   {
     id:2, name:'Snowshoe Ski Retreat', address:'14 Snowshoe Dr, Snowshoe, WV', market:'WV',
@@ -382,9 +572,13 @@ let modalType = null;
 
 // ─── LOGIN ─────────────────────────────────────────────────────────────
 function doLogin() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  renderPage();
+  const ls = document.getElementById('loginScreen');
+  ls.classList.add('hiding');
+  setTimeout(() => {
+    ls.style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    renderPage();
+  }, 450);
 }
 
 // ─── NAVIGATION ────────────────────────────────────────────────────────
@@ -393,6 +587,7 @@ function nav(page, el) {
   if (el) el.classList.add('active');
   currentPage = page;
   currentProp = null;
+  closeSidebar();
   renderPage();
 }
 
@@ -404,7 +599,9 @@ function renderPage() {
     vendors: ['Vendors', 'All service providers across your properties'],
     calendar: ['Booking Calendar', 'Occupancy and scheduling overview'],
     guestcomms: ['Guest Comms AI', 'AI-powered guest support — live across all properties'],
+    owners: ['Owner Portal', 'Owner accounts, revenue splits, and reporting'],
     reports: ['Reports', 'Revenue and performance analytics'],
+    cleaning: ['Cleaning Schedules', 'Turnover tracking, crew assignments, and automations'],
   };
   if (currentProp) {
     document.getElementById('pageTitle').textContent = currentProp.name;
@@ -424,6 +621,7 @@ function renderPage() {
   else if (currentPage === 'guestcomms') renderGuestComms(p);
   else if (currentPage === 'owners') renderOwners(p);
   else if (currentPage === 'reports') renderReports(p);
+  else if (currentPage === 'cleaning') renderCleaning(p);
 }
 
 // ─── DASHBOARD ─────────────────────────────────────────────────────────
@@ -435,24 +633,49 @@ function renderDashboard(p) {
   const totalRev = PROPERTIES.reduce((s,pr) => s + parseInt(pr.revenue.replace(/[$,]/g,'')), 0);
 
   p.innerHTML = `
+    <!-- HIGH PRIORITY BANNER -->
+    <div style="background:var(--surface);border:1px solid rgba(139,92,246,0.2);border-left:3px solid #8b5cf6;border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-sm);">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(239,68,68,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);"></div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:9px;font-weight:700;color:#8b5cf6;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px;">HIGH PRIORITY — PENDING BUILD</div>
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px;">AI Guest Comms → Auto Maintenance Ticket Creation</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;">When a guest reports an issue, the AI will automatically create a maintenance ticket, assign the right vendor, and surface an alert on the dashboard — no manual input required. <span style='color:var(--muted);font-style:italic;'>Note for Jerell meeting: this feature is not yet live but is the next item in the build queue.</span></div>
+      </div>
+      <div style="background:rgba(139,92,246,0.08);color:#8b5cf6;font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;white-space:nowrap;border:1px solid rgba(139,92,246,0.2);">Coming Next</div>
+    </div>
+
     <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-val">41</div>
+      <div class="stat-card" style="border-left:3px solid var(--blue);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val">41</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5"><path d="M2 6.5L8 2l6 4.5V14H2V6.5z"/><path d="M6 14V9h4v5"/></svg></div>
+        </div>
         <div class="stat-label">Total Properties</div>
         <div class="stat-change up">▲ 16 new via Mona Homes</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-val" style="color:var(--red)">${open}</div>
+      <div class="stat-card" style="border-left:3px solid var(--red);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--red)">${open}</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--red-soft);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--red)" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v4M8 11h.01"/></svg></div>
+        </div>
         <div class="stat-label">Open Issues</div>
         <div class="stat-change">${inprog} in progress</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-val" style="color:var(--amber)">${urgent}</div>
+      <div class="stat-card" style="border-left:3px solid var(--amber);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--amber)">${urgent}</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--amber)" stroke-width="1.5"><path d="M8 1L1 14h14L8 1z"/><path d="M8 6v3M8 11h.01"/></svg></div>
+        </div>
         <div class="stat-label">Needs Attention</div>
         <div class="stat-change down">Requires action today</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-val" style="color:var(--green)">$${(totalRev/1000).toFixed(0)}k</div>
+      <div class="stat-card" style="border-left:3px solid var(--green);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--green)">$${(totalRev/1000).toFixed(0)}k</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--green-soft);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M2 14V8h3v6"/><path d="M6.5 14V5h3v9"/><path d="M11 14V2h3v12"/></svg></div>
+        </div>
         <div class="stat-label">Est. Monthly Rev</div>
         <div class="stat-change up">▲ 12% from last month</div>
       </div>
@@ -480,32 +703,111 @@ function renderDashboard(p) {
           ${[['WV','West Virginia',PROPERTIES.filter(p=>p.market==='WV').length,'#5b8ff9'],
              ['FL','Boca Raton, FL',PROPERTIES.filter(p=>p.market==='FL').length,'#4caf7d'],
              ['AZ','Scottsdale, AZ',PROPERTIES.filter(p=>p.market==='AZ').length,'#f0a030']].map(([code,name,count,color])=>`
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:12px;">
-              <div style="width:36px;height:36px;border-radius:8px;background:${color}18;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:${color};">${code}</div>
-              <div><div style="font-size:13px;font-weight:500;">${name}</div><div style="font-size:11px;color:var(--dim);margin-top:2px;">${count} properties active</div></div>
-              <div style="margin-left:auto;font-size:18px;font-weight:600;color:${color};">${count}</div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;display:flex;align-items:center;gap:14px;transition:all 0.2s;cursor:pointer;" onmouseover="this.style.borderColor='${color}30';this.style.transform='translateX(3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
+              <div style="width:40px;height:40px;border-radius:10px;background:${color}12;border:1px solid ${color}25;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:${color};letter-spacing:0.5px;">${code}</div>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">${count} properties active</div></div>
+              <div style="font-size:22px;font-weight:800;color:${color};font-variant-numeric:tabular-nums;">${count}</div>
             </div>
           `).join('')}
         </div>
       </div>
       <div>
         <div class="section-hdr"><div class="section-title">Today's Schedule</div></div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;">
-            <div style="font-size:11px;color:var(--dim);margin-bottom:3px;">8:00 AM</div>
-            <div style="font-size:13px;font-weight:500;">HVAC tech — Boca Raton Beachside</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">CoolBreeze HVAC · 561-555-0134</div>
+        <div style="display:flex;flex-direction:column;gap:0;position:relative;padding-left:20px;">
+          <div style="position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--amber),var(--border));border-radius:1px;"></div>
+          ${[['8:00 AM','HVAC tech — Boca Raton Beachside','CoolBreeze HVAC · 561-555-0134','var(--red)'],
+            ['11:00 AM','Guest checkout — Boca Raton Beachside','Cleaning window 11am–3pm','var(--amber)'],
+            ['3:00 PM','Guest check-in — Marlinton Mountain Cabin','Arriving Apr 14 · 2 guests','var(--green)']].map(([time,title,sub,dotColor])=>`
+            <div style="position:relative;margin-bottom:10px;">
+              <div style="position:absolute;left:-17px;top:14px;width:10px;height:10px;border-radius:50%;background:${dotColor};box-shadow:0 0 8px ${dotColor};"></div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--border2)';this.style.transform='translateX(3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
+                <div style="font-size:10px;color:var(--dim);margin-bottom:4px;font-weight:700;letter-spacing:0.8px;">${time}</div>
+                <div style="font-size:13px;font-weight:600;">${title}</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:3px;">${sub}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- HOSTFULLY INTEGRATION -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-top:20px;box-shadow:var(--shadow-sm);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(79,70,229,0.25);">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5"><path d="M2 3h12v10H2z" rx="2"/><path d="M2 6h12"/><circle cx="5" cy="9" r="1" fill="white" stroke="none"/><circle cx="8" cy="9" r="1" fill="white" stroke="none"/><circle cx="11" cy="9" r="1" fill="white" stroke="none"/></svg>
           </div>
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;">
-            <div style="font-size:11px;color:var(--dim);margin-bottom:3px;">11:00 AM</div>
-            <div style="font-size:13px;font-weight:500;">Guest checkout — Boca Raton Beachside</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Cleaning window 11am–3pm</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--navy);">Hostfully PMS</div>
+            <div style="font-size:11px;color:var(--muted);">Property management system integration</div>
           </div>
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;">
-            <div style="font-size:11px;color:var(--dim);margin-bottom:3px;">3:00 PM</div>
-            <div style="font-size:13px;font-weight:500;">Guest check-in — Marlinton Mountain Cabin</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Arriving Apr 14 · 2 guests</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);"></div>
+          <span style="font-size:11px;font-weight:600;color:var(--green);">Connected</span>
+          <span style="font-size:10px;color:var(--dim);margin-left:6px;">Last sync: 3 min ago</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
+        <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:var(--navy);">41</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Properties Synced</div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:var(--green);">128</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Bookings This Mo.</div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:var(--amber);">73%</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Avg. Occupancy</div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:#8b5cf6;">3</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Channels Active</div>
+        </div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Channel Connections</div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;">
+        <div style="flex:1;background:var(--bg);border-radius:var(--radius);padding:12px 14px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:700;color:#FF5A5F;">Airbnb</div>
+            <div style="font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;background:rgba(34,197,94,0.08);color:var(--green);">Active</div>
           </div>
+          <div style="font-size:11px;color:var(--muted);">142 listings synced</div>
+        </div>
+        <div style="flex:1;background:var(--bg);border-radius:var(--radius);padding:12px 14px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:700;color:#3B5998;">VRBO</div>
+            <div style="font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;background:rgba(34,197,94,0.08);color:var(--green);">Active</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);">89 listings synced</div>
+        </div>
+        <div style="flex:1;background:var(--bg);border-radius:var(--radius);padding:12px 14px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:700;color:#003580;">Booking.com</div>
+            <div style="font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;background:rgba(245,158,11,0.08);color:var(--amber);">Pending setup</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);">41 listings synced</div>
+        </div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Automated Tasks</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">Calendar sync</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">Two-way sync with all OTA channels</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">Rate management</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">Dynamic pricing adjusts nightly based on demand</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">Guest messaging</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">Auto-responses via Traveliir AI for all platforms</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">Review management</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">Auto-request reviews 24hrs after checkout</span></div>
         </div>
       </div>
     </div>
@@ -654,7 +956,7 @@ function renderDetailTab() {
       </div>
     `;
   } else {
-    renderCalendar(el, pr.booked, pr.maint, pr.nextGuest);
+    renderCalendar(el, pr.booked, pr.maint, pr.nextGuest, '', pr.bookings||[], pr.maintDetails||[]);
   }
 }
 
@@ -753,17 +1055,67 @@ function renderCalendarPage(p) {
       ${PROPERTIES.map(pr=>`<button class="mf-btn" onclick="openProp(${pr.id})">${pr.name}</button>`).join('')}
     </div></div>
     <div id="calContainer"></div>`;
-  renderCalendar(document.getElementById('calContainer'), PROPERTIES[0].booked, PROPERTIES[0].maint, PROPERTIES[0].nextGuest, PROPERTIES[0].name);
+  renderCalendar(document.getElementById('calContainer'), PROPERTIES[0].booked, PROPERTIES[0].maint, PROPERTIES[0].nextGuest, PROPERTIES[0].name, PROPERTIES[0].bookings||[], PROPERTIES[0].maintDetails||[]);
 }
 
-function renderCalendar(el, booked, maint, nextGuest, propName='') {
+function renderCalendar(el, booked, maint, nextGuest, propName='', bookings=[], maintDetails=[]) {
   const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const offset = 3; // April 2026 starts Wednesday
+
+  // Build booking ranges from metadata if available, else fallback
+  let bookingRanges = [];
+  if (bookings && bookings.length) {
+    bookingRanges = bookings;
+  } else {
+    let start = null;
+    const sortedBooked = [...booked].sort((a,b)=>a-b);
+    for (let i=0; i<sortedBooked.length; i++) {
+      if (!start) start = sortedBooked[i];
+      if (!sortedBooked.includes(sortedBooked[i]+1)) {
+        bookingRanges.push({start, end: sortedBooked[i], guest:'Guest', channel:'—'});
+        start = null;
+      }
+    }
+  }
+
+  // Popover helper
+  const popoverId = 'calPopover' + Math.random().toString(36).slice(2,8);
+
   el.innerHTML = `
-    <div class="cal-wrapper">
+    <style>
+      .cal-popover{position:fixed;z-index:9999;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,0.12);min-width:260px;opacity:0;pointer-events:none;transition:opacity 0.15s,transform 0.15s;transform:translateY(4px);}
+      .cal-popover.active{opacity:1;pointer-events:auto;transform:translateY(0);}
+      .cal-popover .pop-guest{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+      .cal-popover .pop-channel{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+      .cal-popover .pop-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);}
+      .cal-popover .pop-row:last-of-type{border:none;}
+      .cal-popover .pop-link{display:block;margin-top:10px;font-size:11px;font-weight:600;color:var(--amber);cursor:pointer;text-align:center;padding:6px;background:var(--amber-soft);border-radius:8px;}
+      .cal-popover .pop-link:hover{background:rgba(201,168,76,0.15);}
+    </style>
+    <div id="${popoverId}" class="cal-popover" onclick="event.stopPropagation()"></div>
+    <div class="cal-wrapper" onclick="document.getElementById('${popoverId}').classList.remove('active')">
       <div class="cal-header">
-        <div class="cal-month">April 2026${propName?' — '+propName:''}</div>
+        <div>
+          <div class="cal-month">April 2026</div>
+          ${propName ? `<div style="font-size:12px;color:var(--muted);margin-top:2px;">${propName}</div>` : ''}
+        </div>
+        <div class="cal-nav">
+          <button class="cal-nav-btn">‹</button>
+          <button class="cal-nav-btn">›</button>
+        </div>
       </div>
+
+      <!-- Occupancy Bar -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:11px;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:1px;">Occupancy</span>
+          <span style="font-size:13px;font-weight:700;color:var(--amber);">${Math.round(booked.length/30*100)}%</span>
+        </div>
+        <div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;">
+          <div style="height:100%;width:${Math.round(booked.length/30*100)}%;background:linear-gradient(90deg,var(--amber),var(--amber-light));border-radius:3px;transition:width 0.6s cubic-bezier(0.16,1,0.3,1);"></div>
+        </div>
+      </div>
+
       <div class="cal-grid">
         ${days.map(d=>`<div class="cal-day-hdr">${d}</div>`).join('')}
         ${Array(offset).fill('<div class="cal-cell cal-empty"></div>').join('')}
@@ -772,23 +1124,217 @@ function renderCalendar(el, booked, maint, nextGuest, propName='') {
           let cls='cal-avail';
           if(booked.includes(d)) cls='cal-booked';
           if(maint.includes(d)) cls='cal-maint';
-          const isToday = d===12;
-          return `<div class="cal-cell ${cls}${isToday?' cal-today':''}"><span class="cal-num">${d}</span></div>`;
+          const isToday = d===13;
+          // Find booking for this day
+          const bk = bookingRanges.find(b=>d>=b.start && d<=b.end);
+          const md = maintDetails && maintDetails.find(m=>m.day===d);
+          const clickHandler = bk ? `onclick=\"event.stopPropagation();showCalPopover(event,'${popoverId}',${JSON.stringify(bk).replace(/'/g,"\\'")})\"` : (md ? `onclick=\"event.stopPropagation();showMaintPopover(event,'${popoverId}','${md.label.replace(/'/g,"\\'")}',${md.day})\"` : '');
+          return `<div class="cal-cell ${cls}${isToday?' cal-today':''}" title="Apr ${d}" style="${bk||md?'cursor:pointer':''}" ${clickHandler}><span class="cal-num">${d}</span></div>`;
         }).join('')}
       </div>
+
+      <!-- Booking Strips -->
+      <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border);">
+        <div style="font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Booking Blocks</div>
+        ${bookingRanges.map(r => {
+          const channelColors = {VRBO:'#3B5998',Direct:'var(--green)',Airbnb:'#FF5A5F'};
+          const cc = channelColors[r.channel] || 'var(--amber)';
+          return `
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer;" onclick="event.stopPropagation();showCalPopover(event,'${popoverId}',${JSON.stringify(r).replace(/'/g,"\\'")})"
+               onmouseover="this.children[1].style.transform='scaleX(1.02)';this.children[1].style.boxShadow='0 0 12px rgba(245,166,35,0.15)'"
+               onmouseout="this.children[1].style.transform='none';this.children[1].style.boxShadow='none'">
+            <div style="font-size:11px;color:var(--dim);width:80px;flex-shrink:0;text-align:right;font-variant-numeric:tabular-nums;">Apr ${r.start}–${r.end}</div>
+            <div style="flex:1;height:36px;background:linear-gradient(90deg,rgba(245,166,35,0.12),rgba(245,166,35,0.06));border:1px solid rgba(245,166,35,0.15);border-radius:8px;display:flex;align-items:center;padding:0 12px;transition:all 0.2s;">
+              <span style="font-size:11px;font-weight:600;color:var(--amber);">${r.guest}</span>
+              <span style="margin-left:8px;font-size:9px;font-weight:600;padding:2px 6px;border-radius:8px;background:${cc}12;color:${cc};">${r.channel}</span>
+              <span style="margin-left:auto;font-size:10px;color:var(--dim);">${r.end-r.start+1} nights</span>
+            </div>
+          </div>`;
+        }).join('')}
+        ${maintDetails && maintDetails.length ? maintDetails.map(md => `
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--dim);width:80px;flex-shrink:0;text-align:right;font-variant-numeric:tabular-nums;">Apr ${md.day}</div>
+            <div style="flex:1;height:36px;background:linear-gradient(90deg,rgba(239,68,68,0.1),rgba(239,68,68,0.04));border:1px solid rgba(239,68,68,0.15);border-radius:8px;display:flex;align-items:center;padding:0 12px;">
+              <span style="font-size:11px;font-weight:600;color:var(--red);">${md.label}</span>
+              <span style="margin-left:auto;font-size:9px;font-weight:600;padding:2px 6px;border-radius:8px;background:rgba(239,68,68,0.08);color:var(--red);">Maintenance</span>
+            </div>
+          </div>
+        `).join('') : (maint.length ? `
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--dim);width:80px;flex-shrink:0;text-align:right;font-variant-numeric:tabular-nums;">Apr ${maint[0]}</div>
+            <div style="flex:1;height:36px;background:linear-gradient(90deg,rgba(239,68,68,0.1),rgba(239,68,68,0.04));border:1px solid rgba(239,68,68,0.15);border-radius:8px;display:flex;align-items:center;padding:0 12px;">
+              <span style="font-size:11px;font-weight:600;color:var(--red);">Maintenance Block</span>
+            </div>
+          </div>
+        ` : '')}
+      </div>
+
       <div class="cal-legend">
         <div class="leg"><div class="leg-box" style="background:var(--amber-soft);border:1px solid var(--amber);"></div>Booked</div>
         <div class="leg"><div class="leg-box" style="background:var(--red-soft);border:1px solid var(--red);"></div>Maintenance</div>
         <div class="leg"><div class="leg-box" style="background:var(--surface2);border:1px solid var(--border2);"></div>Available</div>
       </div>
-      <div class="next-booking">
-        <div>
-          <div class="nb-label">Next Guest Arrival</div>
-          <div class="nb-val">${nextGuest}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;">
+        <div class="next-booking">
+          <div>
+            <div class="nb-label">Next Guest Arrival</div>
+            <div class="nb-val">${nextGuest}</div>
+          </div>
         </div>
-        <div style="text-align:right;">
-          <div class="nb-label">Cleaning Window</div>
-          <div class="nb-val">Apr 13 · 11am – 3pm</div>
+        <div class="next-booking">
+          <div>
+            <div class="nb-label">Cleaning Window</div>
+            <div class="nb-val">Apr 13 · 11am – 3pm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function showCalPopover(e, popId, booking) {
+  const pop = document.getElementById(popId);
+  const channelColors = {VRBO:'#3B5998',Direct:'var(--green)',Airbnb:'#FF5A5F'};
+  const cc = channelColors[booking.channel] || 'var(--amber)';
+  pop.innerHTML = `
+    <div class="pop-guest">${booking.guest}</div>
+    <div class="pop-channel" style="background:${cc}12;color:${cc};">${booking.channel}</div>
+    <div class="pop-row"><span style="color:var(--muted);">Check-in</span><span style="font-weight:600;">Apr ${booking.start}</span></div>
+    <div class="pop-row"><span style="color:var(--muted);">Checkout</span><span style="font-weight:600;">Apr ${booking.end}</span></div>
+    <div class="pop-row"><span style="color:var(--muted);">Nights</span><span style="font-weight:600;">${booking.end - booking.start + 1}</span></div>
+    ${booking.guests ? `<div class="pop-row"><span style="color:var(--muted);">Guests</span><span style="font-weight:600;">${booking.guests}</span></div>` : ''}
+    <div class="pop-link" onclick="nav('guestcomms',document.querySelectorAll('.nav-item')[5])">View Guest Comms \u2192</div>
+  `;
+  const rect = e.target.closest('.cal-cell,.cal-popover')?.getBoundingClientRect() || {top:e.clientY,left:e.clientX};
+  pop.style.top = (rect.bottom + 8) + 'px';
+  pop.style.left = Math.min(rect.left, window.innerWidth - 290) + 'px';
+  pop.classList.add('active');
+}
+
+function showMaintPopover(e, popId, label, day) {
+  const pop = document.getElementById(popId);
+  pop.innerHTML = `
+    <div class="pop-guest" style="color:var(--red);">${label}</div>
+    <div class="pop-row"><span style="color:var(--muted);">Date</span><span style="font-weight:600;">Apr ${day}</span></div>
+    <div class="pop-row"><span style="color:var(--muted);">Type</span><span style="font-weight:600;">Turnover Clean</span></div>
+    <div class="pop-row"><span style="color:var(--muted);">Window</span><span style="font-weight:600;">11:00 AM – 3:00 PM</span></div>
+    <div class="pop-link" onclick="nav('cleaning',document.querySelectorAll('.nav-item')[4])">View Cleaning Schedule \u2192</div>
+  `;
+  const rect = e.target.closest('.cal-cell')?.getBoundingClientRect() || {top:e.clientY,left:e.clientX};
+  pop.style.top = (rect.bottom + 8) + 'px';
+  pop.style.left = Math.min(rect.left, window.innerWidth - 290) + 'px';
+  pop.classList.add('active');
+}
+
+// ─── CLEANING SCHEDULES ────────────────────────────────────────────────
+function renderCleaning(p) {
+  const turnovers = [
+    { id:1, prop:'Boca Raton Beachside', addr:'2210 Palmetto Park Rd', checkout:'11:00 AM', checkin:'3:00 PM', crew:'Sparkle Clean Co.', crewPhone:'561-555-0199', status:'in_progress', beds:3, baths:2, sqft:'1,850', notes:'Guest had dog — extra pet treatment needed' },
+    { id:2, prop:'Marlinton Mountain Cabin', addr:'88 Marlinton Pike', checkout:'11:00 AM', checkin:'4:00 PM', crew:'Mountain Maids WV', crewPhone:'304-555-0166', status:'scheduled', beds:2, baths:1, sqft:'1,200', notes:'' },
+    { id:3, prop:'Old Town Scottsdale Casa', addr:'712 Scottsdale Rd', checkout:'10:00 AM', checkin:'3:00 PM', crew:'Desert Fresh Cleaning', crewPhone:'480-555-0211', status:'completed', beds:4, baths:3, sqft:'2,400', notes:'Restocked toiletries and coffee pods' },
+    { id:4, prop:'Snowshoe Ski Retreat', addr:'14 Snowshoe Dr', checkout:'11:00 AM', checkin:'—', crew:'Mountain Maids WV', crewPhone:'304-555-0166', status:'scheduled', beds:3, baths:2, sqft:'1,600', notes:'No check-in today — deep clean window' },
+  ];
+
+  const statusMap = { scheduled:['Scheduled','var(--amber)','rgba(245,158,11,0.08)'], in_progress:['In Progress','var(--blue)','rgba(59,130,246,0.08)'], completed:['Completed','var(--green)','rgba(34,197,94,0.08)'], inspected:['Inspected','#8b5cf6','rgba(139,92,246,0.08)'] };
+
+  p.innerHTML = `
+    <!-- Cleaning Stats -->
+    <div class="stat-grid" style="margin-bottom:20px;">
+      <div class="stat-card" style="border-left:3px solid var(--amber);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--amber);">4</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--amber)" stroke-width="1.5"><path d="M8 1v4M4.5 2.5l2 3M11.5 2.5l-2 3"/><rect x="3" y="6" width="10" height="8" rx="2"/></svg></div>
+        </div>
+        <div class="stat-label">Today's Turnovers</div>
+        <div class="stat-change">4 properties need cleaning</div>
+      </div>
+      <div class="stat-card" style="border-left:3px solid var(--blue);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--blue);">1</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5"/></svg></div>
+        </div>
+        <div class="stat-label">In Progress</div>
+        <div class="stat-change">Boca Raton Beachside</div>
+      </div>
+      <div class="stat-card" style="border-left:3px solid var(--green);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--green);">1</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(34,197,94,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M4 8l3 3 5-6"/></svg></div>
+        </div>
+        <div class="stat-label">Completed</div>
+        <div class="stat-change up">Ready for guest</div>
+      </div>
+      <div class="stat-card" style="border-left:3px solid #8b5cf6;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val">3</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(139,92,246,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#8b5cf6" stroke-width="1.5"><circle cx="5.5" cy="5" r="2.5"/><circle cx="10.5" cy="5" r="2.5"/><path d="M1 14c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/></svg></div>
+        </div>
+        <div class="stat-label">Cleaning Crews</div>
+        <div class="stat-change">Across 3 markets</div>
+      </div>
+    </div>
+
+    <!-- Today's Turnovers -->
+    <div class="section-hdr"><div class="section-title">Today's Turnovers — ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}</div></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+      ${turnovers.map(t => {
+        const [label,color,bg] = statusMap[t.status];
+        return `
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--navy);">${t.prop}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">${t.addr}</div>
+            </div>
+            <div style="font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;background:${bg};color:${color};text-transform:uppercase;letter-spacing:0.5px;">${label}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:12px;">
+            <div style="background:var(--bg);border-radius:var(--radius);padding:8px 10px;text-align:center;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Checkout</div><div style="font-size:13px;font-weight:700;margin-top:2px;">${t.checkout}</div></div>
+            <div style="background:var(--bg);border-radius:var(--radius);padding:8px 10px;text-align:center;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Check-in</div><div style="font-size:13px;font-weight:700;margin-top:2px;color:${t.checkin==='—'?'var(--muted)':'var(--navy)'}">${t.checkin}</div></div>
+            <div style="background:var(--bg);border-radius:var(--radius);padding:8px 10px;text-align:center;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Beds/Baths</div><div style="font-size:13px;font-weight:700;margin-top:2px;">${t.beds}B/${t.baths}Ba</div></div>
+            <div style="background:var(--bg);border-radius:var(--radius);padding:8px 10px;text-align:center;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Sq Ft</div><div style="font-size:13px;font-weight:700;margin-top:2px;">${t.sqft}</div></div>
+            <div style="background:var(--bg);border-radius:var(--radius);padding:8px 10px;text-align:center;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Crew</div><div style="font-size:12px;font-weight:600;margin-top:2px;color:#8b5cf6;">${t.crew.split(' ')[0]}</div></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:28px;height:28px;border-radius:50%;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#8b5cf6;">${t.crew.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+              <div><div style="font-size:12px;font-weight:600;">${t.crew}</div><div style="font-size:10px;color:var(--muted);">${t.crewPhone}</div></div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              ${t.notes ? `<div style="font-size:10px;color:var(--amber);background:var(--amber-soft);padding:3px 8px;border-radius:6px;">Note: ${t.notes.length > 30 ? t.notes.slice(0,30)+'...' : t.notes}</div>` : ''}
+              ${t.status==='completed' ? `<button class="btn-sm" onclick="showToast('Inspection marked complete')">Mark Inspected</button>` : t.status==='in_progress' ? `<button class="btn-sm btn-amber" onclick="showToast('Marked complete')">Mark Complete</button>` : `<button class="btn-sm" onclick="showToast('Notified crew')">Notify Crew</button>`}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- Cleaning Automations -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="font-size:14px;font-weight:700;color:var(--navy);">Cleaning Automations</div>
+        <div style="font-size:10px;color:var(--muted);">Synced with Hostfully PMS + Booking Calendar</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">Auto-schedule turnovers</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">Cleaning auto-created when a checkout is booked on any channel</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">Crew auto-assign</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">Assigns preferred crew by property market (WV, FL, AZ)</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">SMS notifications</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">Crew receives text with property details 2 hours before checkout</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">Photo verification</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">Crew uploads photos after clean — auto-sent to owner portal</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--radius);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>
+          <div style="flex:1;"><span style="font-size:12px;font-weight:600;">Guest-reported issues</span><span style="font-size:11px;color:var(--muted);margin-left:8px;">AI flags cleanliness complaints and auto-schedules re-clean</span></div>
         </div>
       </div>
     </div>
@@ -799,17 +1345,17 @@ function renderCalendar(el, booked, maint, nextGuest, propName='') {
 const GUEST_CONVOS = [
   { id:1, guest:'Michael R.', propId:3, prop:'Boca Raton Beachside', status:'active', unread:2, lastMsg:'Is the pool heated?', time:'2m ago', msgs:[
     { role:'guest', text:'Hey! Just checked in. Is the pool heated?', time:'2:12 PM' },
-    { role:'ai', text:'Hi Michael! Welcome to Boca Raton Beachside 🌊 Yes, the pool is heated and maintained at 82°F year-round. Enjoy your stay! Let me know if you need anything else.', time:'2:12 PM' },
+    { role:'ai', text:'Hi Michael, welcome in! Yes, the pool is heated and stays right around 82 degrees year-round, so it should be perfect for you. Let us know if you need anything at all during your stay.', time:'2:12 PM' },
     { role:'guest', text:'Amazing! Also where are the extra towels?', time:'2:14 PM' },
   ]},
   { id:2, guest:'Jessica T.', propId:1, prop:'Marlinton Mountain Cabin', status:'active', unread:0, lastMsg:'Thanks so much!', time:'1h ago', msgs:[
     { role:'guest', text:'What time is checkout tomorrow?', time:'11:03 AM' },
-    { role:'ai', text:'Hi Jessica! Checkout is at 11:00 AM. If you need a late checkout, just let us know and we\'ll do our best to accommodate. Hope you\'re enjoying the mountains! 🏔️', time:'11:03 AM' },
+    { role:'ai', text:'Hi Jessica! Checkout is at 11:00 AM tomorrow. If you need a bit more time, just let us know and we\'ll do our best to accommodate. Hope the mountains have been treating you well.', time:'11:03 AM' },
     { role:'guest', text:'Thanks so much!', time:'11:05 AM' },
   ]},
   { id:3, guest:'David & Sara K.', propId:4, prop:'Old Town Scottsdale Casa', status:'upcoming', unread:0, lastMsg:'See you Friday!', time:'3h ago', msgs:[
     { role:'guest', text:'We\'re arriving Friday around 4pm, is that okay?', time:'9:30 AM' },
-    { role:'ai', text:'Hi David & Sara! Check-in is anytime after 3:00 PM so 4pm works perfectly. Your smart lock code will be sent 24 hours before arrival. Can\'t wait to host you! 🌵', time:'9:30 AM' },
+    { role:'ai', text:'Hi David and Sara! That works perfectly — check-in is anytime after 3:00 PM. Your smart lock code will be sent about 24 hours before you arrive. We\'re looking forward to having you.', time:'9:30 AM' },
     { role:'guest', text:'See you Friday!', time:'9:32 AM' },
   ]},
 ];
@@ -826,7 +1372,7 @@ function renderGuestComms(p) {
         <div style="padding:14px 16px;border-bottom:1px solid var(--border);">
           <div style="font-size:13px;font-weight:500;margin-bottom:10px;">Active Conversations</div>
           <div style="display:flex;gap:6px;">
-            <div style="flex:1;background:var(--surface2);border-radius:var(--radius);padding:7px 10px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span>🔍</span> Search guests...</div>
+            <div style="flex:1;background:var(--surface2);border-radius:var(--radius);padding:7px 10px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg> Search guests...</div>
           </div>
         </div>
         <div style="flex:1;overflow-y:auto;">
@@ -864,7 +1410,7 @@ function renderGuestComms(p) {
           </div>
           <div style="display:flex;gap:8px;">
             <button class="btn-sm" onclick="openProp(${activeConvo.propId})">View Property →</button>
-            <button class="btn-sm" style="background:var(--red-soft);color:var(--red);border-color:var(--red);">Take Over</button>
+            <button class="btn-sm" style="background:var(--amber-soft);color:var(--amber);border-color:var(--amber);">Take Over</button>
           </div>
         </div>
 
@@ -923,16 +1469,46 @@ function selectConvo(id) {
 }
 
 function insertTemplate(type) {
-  const input = document.getElementById('guestInput');
-  if (!input) return;
-  const templates = {
-    'Pre-arrival instructions': 'Send pre-arrival instructions to guest',
-    'Check-in welcome': 'Send a welcome message to the guest who just checked in',
-    'Mid-stay check-in': 'Send a mid-stay check-in message to see how the guest is doing',
-    'Checkout reminder': 'Send a checkout reminder with instructions',
+  const prop = PROPERTIES.find(p => p.id === activeConvo.propId);
+  const guest = activeConvo.guest;
+  const propName = prop?.name || 'your property';
+
+  const templateConvos = {
+    'Pre-arrival instructions': [
+      { role:'ai', text:`Hi ${guest.split(' ')[0]}, we're looking forward to hosting you at ${propName}! Just wanted to share a few details before you arrive.`, time:'10:00 AM' },
+      { role:'ai', text:`Check-in is anytime after 3:00 PM. Your smart lock code will be sent 24 hours before arrival. The WiFi network is "TravellirGuest" and the password is TravellirGuest2024. Parking is available in the driveway — two spots.`, time:'10:00 AM' },
+      { role:'guest', text:'Got it, thank you! Is there anything else we should know?', time:'10:15 AM' },
+      { role:'ai', text:`Just a couple of house notes — no smoking on the property, and quiet hours are after 10 PM out of respect for the neighbors. There are extra towels and linens in the hall closet, second shelf. If anything comes up during your stay, just message us here and we'll take care of it.`, time:'10:15 AM' },
+      { role:'guest', text:'Perfect, really appreciate the details. See you soon!', time:'10:18 AM' },
+    ],
+    'Check-in welcome': [
+      { role:'ai', text:`Welcome to ${propName}, ${guest.split(' ')[0]}! We hope you had a smooth trip in. Everything should be ready for you.`, time:'3:30 PM' },
+      { role:'guest', text:'Just walked in, place looks great! Quick question — how do I work the thermostat?', time:'3:45 PM' },
+      { role:'ai', text:`Thank you, glad to hear it! The thermostat is the white panel on the hallway wall — just tap the screen to wake it up, then use the arrows to adjust. It's currently set to 72 but feel free to change it to whatever's comfortable.`, time:'3:45 PM' },
+      { role:'guest', text:'Found it, thanks so much!', time:'3:48 PM' },
+    ],
+    'Mid-stay check-in': [
+      { role:'ai', text:`Hi ${guest.split(' ')[0]}, just checking in — how's everything going at ${propName}? Is there anything you need or anything we can help with?`, time:'11:00 AM' },
+      { role:'guest', text:'Everything is wonderful, honestly. The place is really well stocked. One thing — the kitchen faucet drips a little.', time:'11:30 AM' },
+      { role:'ai', text:`So glad to hear you're enjoying your stay. Thanks for letting us know about the faucet — I've made a note and we'll have our maintenance team take a look. It shouldn't affect anything during your visit, but we want to get it sorted. Anything else at all, just reach out.`, time:'11:30 AM' },
+      { role:'guest', text:'Will do, thanks for being so responsive!', time:'11:32 AM' },
+    ],
+    'Checkout reminder': [
+      { role:'ai', text:`Hi ${guest.split(' ')[0]}, just a friendly heads up — checkout tomorrow is at 11:00 AM. No need to do anything major, just a few quick things if you don't mind.`, time:'4:00 PM' },
+      { role:'ai', text:`Please start the dishwasher if there are any dishes, toss used towels in the bathtub, take out any trash, and lock the door behind you — the smart lock will auto-engage. That's it!`, time:'4:00 PM' },
+      { role:'guest', text:'Easy enough! Do we need to return the key or anything?', time:'4:20 PM' },
+      { role:'ai', text:`No key to worry about — the smart lock code will deactivate after checkout. Just make sure the door closes fully behind you and you're all set. We really hope you enjoyed your stay, and thank you for being such a great guest.`, time:'4:20 PM' },
+      { role:'guest', text:'We had an amazing time, thank you for everything!', time:'4:22 PM' },
+    ],
   };
-  input.value = templates[type] || type;
-  input.focus();
+
+  const msgs = templateConvos[type];
+  if (msgs) {
+    activeConvo.msgs = msgs;
+    activeConvo.unread = 0;
+    activeConvo.lastMsg = msgs[msgs.length - 1].text.slice(0, 40) + '...';
+    renderGuestComms(document.getElementById('pageContent'));
+  }
 }
 
 async function sendGuestMsg() {
@@ -973,7 +1549,7 @@ async function sendGuestMsg() {
   const propOwner = prop?.owner || 'the property owner';
 
   try {
-    const systemPrompt = `You are the AI guest support assistant for Travellir Management LLC, a short-term rental company. You are handling guest communications for ${propName} located at ${propAddr}.
+    const systemPrompt = `You are the guest support assistant for Travellir Premier Rentals, a short-term rental management company. You are handling guest communications for ${propName} located at ${propAddr}.
 
 Property details you know:
 - Property: ${propName}
@@ -981,14 +1557,21 @@ Property details you know:
 - Owner: ${propOwner}
 - Checkout time: 11:00 AM
 - Check-in time: 3:00 PM
-- WiFi password: TravellirGuest2024 (sample)
+- WiFi password: TravellirGuest2024
 - Smart lock code: sent 24hrs before arrival
 - Pool: heated to 82°F (if applicable)
 - Parking: 2 spots available in driveway
 - Extra towels: in the hall closet on the second shelf
 - House rules: No smoking, no parties, no pets unless pre-approved
 
-Respond warmly, concisely, and helpfully. Use 1-2 emojis max. Keep responses under 3 sentences unless instructions are needed. You represent Travellir professionally.`;
+IMPORTANT TONE RULES:
+- Never use emojis. Not even one.
+- Write like a warm, experienced concierge — professional yet genuinely kind.
+- Use the guest's first name naturally.
+- Keep responses concise: 2-3 sentences max unless detailed instructions are needed.
+- Sound like a real person, not a chatbot. Vary your sentence structure.
+- Be helpful and anticipate follow-up needs.
+- Sign off naturally, not with canned phrases.`;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -1016,7 +1599,7 @@ Respond warmly, concisely, and helpfully. Use 1-2 emojis max. Keep responses und
     typing.remove();
     const errBubble = document.createElement('div');
     errBubble.style.cssText = 'align-self:flex-start;max-width:72%;';
-    errBubble.innerHTML = `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:0 12px 12px 12px;padding:10px 14px;font-size:13px;color:var(--muted);">Hi! Thanks for your message. I'm looking into that for you right now — I'll have an answer in just a moment! 😊</div>`;
+    errBubble.innerHTML = `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:0 12px 12px 12px;padding:10px 14px;font-size:13px;color:var(--muted);">Thanks for reaching out! Let me look into that for you — I should have an answer shortly.</div>`;
     msgs.appendChild(errBubble);
   }
 
@@ -1050,27 +1633,33 @@ function showAiConfig() {
 }
 
 // ─── OWNERS ────────────────────────────────────────────────────────────
+const OWNER_DATA = [
+  { name:'Sarah Mitchell', email:'sarah@mitchellhomes.com', phone:'304-555-0177', since:'Jan 2023', payout:'1st of month', color:'#3b82f6' },
+  { name:'Tom & Diane Beckett', email:'becketts@gmail.com', phone:'304-555-0201', since:'Mar 2023', payout:'15th of month', color:'#16a34a' },
+  { name:'Mona Homes LLC', email:'ops@monahomes.com', phone:'561-555-0300', since:'Sep 2024', payout:'1st of month', color:'#8b5cf6', badge:'16 properties in pipeline' },
+  { name:'Anthony Reyes', email:'anthony.reyes@outlook.com', phone:'480-555-0188', since:'Nov 2024', payout:'1st of month', color:'#f59e0b' },
+];
+
 function renderOwners(p) {
-  const owners = ['Sarah Mitchell','Tom & Diane Beckett','Mona Homes LLC','Anthony Reyes'];
   p.innerHTML = `
     <div class="section-hdr"><div class="section-title">Owner Accounts</div></div>
     <div style="display:flex;flex-direction:column;gap:10px;">
-      ${owners.map((o,i)=>{
-        const props = PROPERTIES.filter(pr=>pr.owner===o);
+      ${OWNER_DATA.map((o,i)=>{
+        const props = PROPERTIES.filter(pr=>pr.owner===o.name);
         const rev = props.reduce((s,pr)=>s+parseInt(pr.revenue.replace(/[$,]/g,'')),0);
-        const initials = o.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        const initials = o.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
         return `
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;display:flex;align-items:center;gap:16px;">
-            <div style="width:42px;height:42px;border-radius:50%;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--amber);flex-shrink:0;">${initials}</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-sm);">
+            <div style="width:42px;height:42px;border-radius:50%;background:${o.color}10;border:1.5px solid ${o.color}40;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:${o.color};flex-shrink:0;">${initials}</div>
             <div style="flex:1;">
-              <div style="font-size:14px;font-weight:500;">${o}</div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:14px;font-weight:600;">${o.name}</span>${o.badge?`<span style="font-size:9px;font-weight:700;background:rgba(139,92,246,0.08);color:#8b5cf6;padding:2px 8px;border-radius:10px;border:1px solid rgba(139,92,246,0.15);">${o.badge}</span>`:''}</div>
               <div style="font-size:11px;color:var(--muted);margin-top:2px;">${props.length} propert${props.length===1?'y':'ies'} · ${props.map(pr=>pr.market).filter((v,i,a)=>a.indexOf(v)===i).join(', ')}</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size:16px;font-weight:600;color:var(--green);">$${rev.toLocaleString()}/mo</div>
-              <div style="font-size:11px;color:var(--dim);margin-top:2px;">combined revenue</div>
+              <div style="font-size:16px;font-weight:700;color:var(--green);">$${rev.toLocaleString()}/mo</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">combined revenue</div>
             </div>
-            <button class="btn-sm" style="margin-left:8px;">View Portal →</button>
+            <button class="btn-sm" style="margin-left:8px;" onclick="showOwnerModal(${i})">View Portal →</button>
           </div>
         `;
       }).join('')}
@@ -1078,32 +1667,208 @@ function renderOwners(p) {
   `;
 }
 
+function showOwnerModal(idx) {
+  const o = OWNER_DATA[idx];
+  const props = PROPERTIES.filter(pr=>pr.owner===o.name);
+  const rev = props.reduce((s,pr)=>s+parseInt(pr.revenue.replace(/[$,]/g,'')),0);
+  const initials = o.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+      <div style="width:52px;height:52px;border-radius:50%;background:${o.color}12;border:2px solid ${o.color}40;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:${o.color};flex-shrink:0;">${initials}</div>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:17px;font-weight:700;color:var(--navy);">${o.name}</span>${o.badge?`<span style="font-size:9px;font-weight:700;background:rgba(139,92,246,0.08);color:#8b5cf6;padding:2px 8px;border-radius:10px;border:1px solid rgba(139,92,246,0.15);">${o.badge}</span>`:''}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">${o.email} · ${o.phone}</div>
+      </div>
+      <button onclick="closeModal()" style="background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:4px;">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Owner Since</div><div style="font-size:14px;font-weight:600;">${o.since}</div></div>
+      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Payout Day</div><div style="font-size:14px;font-weight:600;">${o.payout}</div></div>
+      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Monthly Rev</div><div style="font-size:14px;font-weight:700;color:var(--green);">$${rev.toLocaleString()}</div></div>
+    </div>
+    <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Properties (${props.length})</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;max-height:200px;overflow-y:auto;">
+      ${props.map(pr=>{
+        const issues = pr.issues.filter(i=>i.status==='open').length;
+        return `
+        <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:12px;">
+          <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${pr.name}</div><div style="font-size:11px;color:var(--muted);">${pr.market}</div></div>
+          <div style="font-size:13px;font-weight:600;color:var(--navy);">${pr.revenue}</div>
+          <div style="font-size:11px;color:var(--muted);">${pr.occupancy}</div>
+          ${issues>0?`<div style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:var(--red-soft);color:var(--red);">${issues} issue${issues>1?'s':''}</div>`:`<div style="font-size:10px;color:var(--green);">No issues</div>`}
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Owner Notes</div>
+    <textarea class="modal-textarea" style="margin-bottom:20px;" placeholder="Add any notes about this owner..."></textarea>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-sm btn-amber" style="flex:1;" onclick="closeModal();showToast('Monthly report sent to ${o.name}')">Send Monthly Report</button>
+      <button class="btn-sm" style="flex:1;" onclick="closeModal();showToast('Message draft opened for ${o.name}')">Message Owner</button>
+    </div>
+  `;
+  document.getElementById('modal').style.display = 'flex';
+}
+
 // ─── REPORTS ──────────────────────────────────────────────────────────
 function renderReports(p) {
+  const markets = [
+    {name:'West Virginia', rev:11200, props:3, color:'#3b82f6', pct:80},
+    {name:'Boca Raton, FL', rev:5800, props:1, color:'#f59e0b', pct:41},
+    {name:'Scottsdale, AZ', rev:11400, props:2, color:'#8b5cf6', pct:81},
+  ];
+  const topProps = [
+    {rank:1, name:'Scottsdale Desert Retreat', market:'AZ', rev:'$6,100', occ:'82%', color:'#8b5cf6'},
+    {rank:2, name:'Old Town Scottsdale Casa', market:'AZ', rev:'$5,300', occ:'78%', color:'#8b5cf6'},
+    {rank:3, name:'Boca Raton Beachside', market:'FL', rev:'$5,800', occ:'74%', color:'#f59e0b'},
+  ];
+  const payouts = [
+    {owner:'Mona Homes LLC', amount:'$11,000', date:'Apr 1, 2026', status:'Paid', color:'var(--green)'},
+    {owner:'Sarah Mitchell', amount:'$4,200', date:'Apr 1, 2026', status:'Paid', color:'var(--green)'},
+    {owner:'Tom & Diane Beckett', amount:'$3,800', date:'Apr 1, 2026', status:'Paid', color:'var(--green)'},
+    {owner:'Anthony Reyes', amount:'$5,300', date:'Apr 15, 2026', status:'Pending', color:'var(--amber)'},
+  ];
+
   p.innerHTML = `
-    <div class="stat-grid" style="margin-bottom:24px;">
-      <div class="stat-card"><div class="stat-val" style="color:var(--green)">$27,700</div><div class="stat-label">Monthly Revenue</div><div class="stat-change up">▲ 12%</div></div>
-      <div class="stat-card"><div class="stat-val">73%</div><div class="stat-label">Avg Occupancy</div><div class="stat-change up">▲ 5%</div></div>
-      <div class="stat-card"><div class="stat-val">4.82</div><div class="stat-label">Avg Guest Rating</div><div class="stat-change up">▲ 0.1</div></div>
-      <div class="stat-card"><div class="stat-val">6</div><div class="stat-label">Properties Tracked</div><div class="stat-change">of 41 demo</div></div>
+    <!-- Portfolio Summary -->
+    <div class="stat-grid" style="margin-bottom:20px;">
+      <div class="stat-card" style="border-left:3px solid var(--green);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--green);">$28,400</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(34,197,94,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M2 14V8h3v6"/><path d="M6.5 14V5h3v9"/><path d="M11 14V2h3v12"/></svg></div>
+        </div>
+        <div class="stat-label">Total Revenue</div>
+        <div class="stat-change up">▲ 12% from last month</div>
+      </div>
+      <div class="stat-card" style="border-left:3px solid var(--amber);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--amber);">74%</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--amber)" stroke-width="1.5"><rect x="1.5" y="2.5" width="13" height="12" rx="2"/><path d="M1.5 6.5h13"/></svg></div>
+        </div>
+        <div class="stat-label">Avg Occupancy</div>
+        <div class="stat-change up">▲ 5% from last month</div>
+      </div>
+      <div class="stat-card" style="border-left:3px solid var(--red);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--red);">3</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(239,68,68,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--red)" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5"/></svg></div>
+        </div>
+        <div class="stat-label">Open Issues</div>
+        <div class="stat-change">Requires attention</div>
+      </div>
+      <div class="stat-card" style="border-left:3px solid var(--blue);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--blue);">41</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5"><path d="M2 3h5v5H2zM9 3h5v5H9zM2 10h5v5H2zM9 10h5v5H9z"/></svg></div>
+        </div>
+        <div class="stat-label">Properties Active</div>
+        <div class="stat-change up">16 new via Mona Homes</div>
+      </div>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;">
-      <div class="section-hdr"><div class="section-title">Revenue by Property</div></div>
-      ${PROPERTIES.map(pr=>{
-        const val = parseInt(pr.revenue.replace(/[$,]/g,''));
-        const pct = Math.round((val/6100)*100);
-        return `
-          <div style="margin-bottom:14px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-              <div style="font-size:13px;">${pr.name}</div>
-              <div style="font-size:13px;font-weight:500;">${pr.revenue}/mo</div>
+
+    <!-- Revenue by Market -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);">
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;">Revenue by Market</div>
+        ${markets.map(m => `
+          <div style="margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:10px;height:10px;border-radius:3px;background:${m.color};"></div>
+                <span style="font-size:13px;font-weight:600;">${m.name}</span>
+                <span style="font-size:10px;color:var(--muted);">${m.props} properties</span>
+              </div>
+              <span style="font-size:14px;font-weight:700;">$${m.rev.toLocaleString()}<span style="font-size:10px;font-weight:400;color:var(--muted);">/mo</span></span>
             </div>
-            <div style="height:6px;background:var(--surface2);border-radius:3px;">
-              <div style="height:100%;width:${pct}%;background:var(--amber);border-radius:3px;"></div>
+            <div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden;">
+              <div style="height:100%;width:${m.pct}%;background:${m.color};border-radius:4px;transition:width 0.8s cubic-bezier(0.16,1,0.3,1);"></div>
             </div>
           </div>
-        `;
-      }).join('')}
+        `).join('')}
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px;display:flex;justify-content:space-between;">
+          <span style="font-size:12px;font-weight:700;color:var(--navy);">Portfolio Total</span>
+          <span style="font-size:14px;font-weight:700;color:var(--green);">$28,400/mo</span>
+        </div>
+      </div>
+
+      <!-- Top Performing Properties -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);">
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;">Top Performing Properties</div>
+        ${topProps.map(tp => `
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg);border-radius:var(--radius);margin-bottom:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:${tp.color}12;border:1px solid ${tp.color}30;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:${tp.color};">${tp.rank}</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:600;">${tp.name}</div>
+              <div style="font-size:10px;color:var(--muted);">${tp.market} Market</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:14px;font-weight:700;color:var(--navy);">${tp.rev}</div>
+              <div style="font-size:10px;color:var(--green);">${tp.occ} occ.</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Recent Payouts + Issue Resolution -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
+      <!-- Recent Payouts -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div style="font-size:14px;font-weight:700;color:var(--navy);">Recent Payouts</div>
+          <div style="font-size:10px;color:var(--muted);">April 2026</div>
+        </div>
+        <div style="overflow:hidden;border-radius:var(--radius);">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="background:var(--bg);">
+                <th style="text-align:left;padding:8px 12px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Owner</th>
+                <th style="text-align:right;padding:8px 12px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Amount</th>
+                <th style="text-align:right;padding:8px 12px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Date</th>
+                <th style="text-align:right;padding:8px 12px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${payouts.map(po => `
+                <tr style="border-top:1px solid var(--border);">
+                  <td style="padding:10px 12px;font-weight:600;">${po.owner}</td>
+                  <td style="padding:10px 12px;text-align:right;font-weight:700;">${po.amount}</td>
+                  <td style="padding:10px 12px;text-align:right;color:var(--muted);">${po.date}</td>
+                  <td style="padding:10px 12px;text-align:right;"><span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:10px;background:${po.color}12;color:${po.color};">${po.status}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Issue Resolution Rate -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;">Issue Resolution</div>
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:42px;font-weight:800;color:var(--green);line-height:1;">80%</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Resolution Rate</div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;">
+            <div style="height:100%;width:80%;background:linear-gradient(90deg,var(--green),#4ade80);border-radius:5px;transition:width 1s cubic-bezier(0.16,1,0.3,1);"></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;">
+          <span style="color:var(--green);font-weight:600;">8 resolved</span>
+          <span style="color:var(--muted);">10 total this month</span>
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px;">
+            <span style="color:var(--muted);">Avg response time</span>
+            <span style="font-weight:600;">2.4 hours</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;">
+            <span style="color:var(--muted);">Avg resolution time</span>
+            <span style="font-weight:600;">18 hours</span>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -1115,34 +1880,50 @@ function showModal(type) {
   const propName = currentProp ? currentProp.name : 'Portfolio';
 
   if (type === 'issue') {
+    // Collect all vendors across properties
+    const allVendors = [];
+    PROPERTIES.forEach(pr => pr.vendors.forEach(v => { if (!allVendors.find(av=>av.name===v.name)) allVendors.push(v); }));
+
     box.innerHTML = `
-      <div class="modal-title">Log New Issue — ${propName}</div>
-      <div class="modal-form-group"><label class="modal-label">Property</label>
-        <select class="modal-select" id="mProp">
-          ${PROPERTIES.map(pr=>`<option value="${pr.id}" ${currentProp&&currentProp.id===pr.id?'selected':''}>${pr.name}</option>`).join('')}
-        </select>
+      <div class="modal-title">Log New Issue</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="modal-form-group"><label class="modal-label">Property</label>
+          <select class="modal-select" id="mProp">
+            ${PROPERTIES.map(pr=>`<option value="${pr.id}" ${currentProp&&currentProp.id===pr.id?'selected':''}>${pr.name}</option>`).join('')}
+          </select>
+        </div>
+        <div class="modal-form-group"><label class="modal-label">Assigned Vendor</label>
+          <select class="modal-select" id="mVendor">
+            <option value="">— Select vendor —</option>
+            ${allVendors.map(v=>`<option value="${v.name}">${v.name} (${v.role})</option>`).join('')}
+          </select>
+        </div>
       </div>
       <div class="modal-form-group"><label class="modal-label">Issue Title</label>
         <input class="modal-input" id="mTitle" placeholder="e.g. Garbage disposal broken" />
       </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="modal-form-group"><label class="modal-label">Issue Type</label>
+          <select class="modal-select" id="mCategory">
+            <option>Plumbing</option><option>HVAC</option><option>Internet</option>
+            <option>Cleaning</option><option>Electrical</option><option>Other</option>
+          </select>
+        </div>
+        <div class="modal-form-group"><label class="modal-label">Priority</label>
+          <select class="modal-select" id="mPriority">
+            <option value="info">Low</option>
+            <option value="warn" selected>Medium</option>
+            <option value="alert">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+      </div>
       <div class="modal-form-group"><label class="modal-label">Description</label>
         <textarea class="modal-textarea" id="mDesc" placeholder="What happened? What's the impact?"></textarea>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="modal-form-group"><label class="modal-label">Type</label>
-          <select class="modal-select" id="mType">
-            <option value="alert">🚨 Urgent</option>
-            <option value="warn" selected>⚠️ Maintenance</option>
-            <option value="info">📋 Routine</option>
-          </select>
-        </div>
-        <div class="modal-form-group"><label class="modal-label">Assigned Vendor</label>
-          <input class="modal-input" id="mVendor" placeholder="Vendor name" />
-        </div>
-      </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-primary" style="width:auto;padding:8px 20px;margin:0;" onclick="saveIssue()">Save Issue</button>
+        <button class="btn-primary" style="width:auto;padding:8px 20px;margin:0;" onclick="saveIssue()">Create Issue</button>
       </div>
     `;
   } else {
@@ -1176,15 +1957,17 @@ function saveIssue() {
   const pr = PROPERTIES.find(p => p.id === propId);
   const title = document.getElementById('mTitle').value || 'New Issue';
   const desc = document.getElementById('mDesc').value || '';
-  const type = document.getElementById('mType').value;
+  const type = document.getElementById('mPriority').value;
+  const category = document.getElementById('mCategory').value;
   const vendor = document.getElementById('mVendor').value || 'Unassigned';
-  const icons = { alert:'🚨', warn:'🔧', info:'📋' };
-  pr.issues.unshift({ id: Date.now(), type, icon: icons[type], title, desc, status:'open', date:'Today', vendor });
+  const catIcons = { Plumbing:'🔧', HVAC:'❄️', Internet:'⚡', Cleaning:'🧹', Electrical:'💡', Other:'📋' };
+  const icon = catIcons[category] || '🔧';
+  pr.issues.unshift({ id: Date.now(), type: type==='urgent'?'alert':type, icon, title: `${category} — ${title}`, desc, status:'open', date:'Today', vendor });
   if (pr.status === 'ok') pr.status = 'warn';
   closeModal();
   if (currentProp && currentProp.id === propId) renderDetail(document.getElementById('pageContent'));
   else renderPage();
-  showToast('Issue logged ✓');
+  showToast('Issue logged successfully');
   document.getElementById('alertBadge').textContent = PROPERTIES.flatMap(p=>p.issues).filter(i=>i.status==='open').length;
 }
 
