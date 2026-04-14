@@ -277,23 +277,25 @@
     .mobile-toggle { display: flex; }
 
     /* Top bar */
-    .top-bar { padding: 14px 18px; gap: 10px; }
+    .top-bar { padding: 14px 16px; gap: 8px; }
     .page-title { font-size: 16px; }
+    .page-subtitle { font-size: 11px; }
     .top-actions { gap: 6px; }
     .btn-sm { padding: 7px 12px; font-size: 11px; }
 
     /* Content */
-    .page-content { padding: 18px; }
+    .page-content { padding: 16px; }
 
-    /* Stats */
-    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
-    .stat-card { padding: 16px 18px; }
-    .stat-val { font-size: 24px; }
-    .stat-label { font-size: 9px; }
+    /* Stats — 2-col on mobile */
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+    .stat-card { padding: 14px 16px; }
+    .stat-val { font-size: 22px; }
+    .stat-label { font-size: 9px; letter-spacing: 0.8px; }
+    .stat-change { font-size: 10px; }
 
     /* Properties */
     .prop-grid { grid-template-columns: 1fr; gap: 10px; }
-    .prop-card { padding: 18px 20px; }
+    .prop-card { padding: 16px 18px; }
     .prop-stats { grid-template-columns: repeat(3, 1fr); gap: 6px; }
 
     /* Market section */
@@ -301,31 +303,37 @@
     .mf-btn { padding: 6px 14px; font-size: 11px; }
 
     /* Calendar */
-    .cal-wrapper { padding: 16px; }
+    .cal-wrapper { padding: 14px; }
     .cal-cell { border-radius: 6px; }
     .cal-num { font-size: 11px; }
     .cal-day-hdr { font-size: 9px; padding: 4px 0; }
     .cal-legend { flex-wrap: wrap; gap: 10px; margin-top: 12px; }
     .next-booking { padding: 12px 14px; flex-direction: column; gap: 10px; align-items: flex-start; }
 
-    /* Dashboard grid → stacked */
-    .page-content > div:last-child[style*="grid-template-columns: 1fr 1fr"] { display: block !important; }
-    .page-content > div:last-child[style*="grid-template-columns: 1fr 1fr"] > div { margin-bottom: 20px; }
+    /* Calendar booking popovers — full-width on mobile */
+    .cal-cell { position: relative; }
+
+    /* Dashboard multi-column grids → stacked */
+    .page-content > div[style*="grid-template-columns: 1fr 1fr"] { display: block !important; }
+    .page-content > div[style*="grid-template-columns: 1fr 1fr"] > div { margin-bottom: 16px; }
+    .page-content > div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+    .page-content > div[style*="grid-template-columns:2fr 1fr"] { grid-template-columns: 1fr !important; }
+    .page-content > div[style*="grid-template-columns:1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
 
     /* Alerts */
     .alert-row { flex-wrap: wrap; gap: 8px; }
     .alert-time { width: 100%; text-align: right; margin-top: -4px; }
 
     /* Detail view */
-    .detail-header { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px 20px; }
-    .detail-stats { width: 100%; justify-content: space-between; }
+    .detail-header { flex-direction: column; align-items: flex-start; gap: 14px; padding: 16px 18px; }
+    .detail-stats { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .ds-val { font-size: 16px; }
-    .detail-name { font-size: 18px; }
+    .detail-name { font-size: 17px; }
 
     /* Tabs */
     .tab-row { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
     .tab-row::-webkit-scrollbar { display: none; }
-    .tab-btn { white-space: nowrap; padding: 10px 16px; font-size: 12px; }
+    .tab-btn { white-space: nowrap; padding: 10px 14px; font-size: 12px; }
 
     /* Issues */
     .issue-item { padding: 14px 16px; }
@@ -338,41 +346,106 @@
     .page-content > div[style*="grid-template-columns:280px"] { grid-template-columns: 1fr !important; height: auto !important; }
     .page-content > div[style*="grid-template-columns:280px"] > div:first-child { max-height: 200px; border-right: none !important; border-bottom: 1px solid var(--border); }
 
+    /* Reports page — all grids stack */
+    .page-content > div[style*="grid-template-columns:1fr 1fr;"] { grid-template-columns: 1fr !important; }
+    .page-content > div[style*="grid-template-columns:2fr 1fr;"] { grid-template-columns: 1fr !important; }
+
+    /* Tables — horizontal scroll */
+    table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+    thead, tbody, tr { display: table; width: 100%; table-layout: fixed; }
+
+    /* Cleaning turnover cards */
+    .page-content > div[style*="border-left:4px"] { margin-bottom: 16px; }
+
+    /* Cleaning turnover stat grids (checkout/checkin/beds/sqft/crew) */
+    .page-content div[style*="grid-template-columns:1fr 1fr 1fr 1fr 1fr"] { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }
+    .page-content div[style*="grid-template-columns: repeat(5"] { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }
+
+    /* Hostfully PMS panel */
+    .page-content div[style*="grid-template-columns:1fr 1fr;gap:12px"] { grid-template-columns: 1fr !important; }
+
+    /* Owner portal modal grid */
+    .modal-box div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+
     /* Modal */
-    .modal-box { width: calc(100vw - 32px); max-width: 440px; padding: 24px; margin: 16px; }
+    .modal-box { width: calc(100vw - 32px); max-width: 440px; padding: 22px; margin: 16px; max-height: calc(100vh - 32px); overflow-y: auto; }
 
     /* Toast */
     .toast { left: 16px; right: 16px; bottom: 16px; text-align: center; }
 
     /* Login */
-    .login-card { width: calc(100vw - 32px); max-width: 440px; padding: 36px 28px; }
+    .login-card { width: calc(100vw - 32px); max-width: 440px; padding: 32px 24px; }
     .login-card img { height: 60px !important; }
+
+    /* Popover on mobile — fixed bottom sheet style */
+    div[style*="position:absolute"][style*="z-index:20"] {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      top: auto !important;
+      width: 100% !important;
+      min-width: unset !important;
+      border-radius: 16px 16px 0 0 !important;
+      box-shadow: 0 -4px 30px rgba(0,0,0,0.15) !important;
+      z-index: 100 !important;
+      padding: 20px !important;
+    }
+
+    /* Banner / priority alert */
+    .page-content > div[style*="border-left:4px solid var(--amber)"] { padding: 16px !important; }
+    .page-content > div[style*="border-left:4px solid var(--amber)"] > div[style*="display:flex"] { flex-direction: column !important; gap: 12px !important; }
   }
 
   /* ─── SMALL MOBILE: 480px ─── */
   @media (max-width: 480px) {
     .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-    .stat-card { padding: 14px 16px; }
-    .stat-val { font-size: 22px; }
+    .stat-card { padding: 12px 14px; }
+    .stat-val { font-size: 20px; }
 
-    .page-content { padding: 14px; }
+    .page-content { padding: 12px; }
     .top-bar { padding: 12px 14px; }
-    .page-title { font-size: 15px; }
+    .page-title { font-size: 14px; }
 
-    .prop-card { padding: 16px; }
+    .prop-card { padding: 14px; }
     .prop-name { font-size: 13px; }
+    .prop-stats { grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
 
     .cal-grid { gap: 2px; }
-    .cal-cell { border-radius: 4px; }
+    .cal-cell { border-radius: 4px; min-height: 52px; }
 
-    .login-card { padding: 28px 20px; }
+    .login-card { padding: 24px 18px; }
     .login-card img { height: 50px !important; }
-    .login-sub { font-size: 12px; margin-bottom: 28px; }
+    .login-sub { font-size: 12px; margin-bottom: 24px; }
     .form-input { padding: 11px 14px; font-size: 13px; }
     .btn-primary { padding: 12px; font-size: 13px; }
 
-    .detail-stats { flex-wrap: wrap; gap: 12px; }
-    .ds { text-align: left; }
+    .detail-stats { flex-wrap: wrap; gap: 10px; }
+    .ds { text-align: left; min-width: 45%; }
+
+    /* Section headers */
+    .section-title { font-size: 13px; }
+    .section-hdr { padding: 10px 0; }
+
+    /* Reports stat cards — icon size down */
+    .stat-card div[style*="width:40px"] { width: 32px !important; height: 32px !important; }
+
+    /* Cleaning turnover grids → 2-col */
+    .page-content div[style*="grid-template-columns:1fr 1fr 1fr 1fr 1fr"] { grid-template-columns: repeat(2, 1fr) !important; }
+    .page-content div[style*="grid-template-columns: repeat(5"] { grid-template-columns: repeat(2, 1fr) !important; }
+
+    /* Hostfully channel cards */
+    .page-content div[style*="grid-template-columns:1fr 1fr;gap:12px"] { grid-template-columns: 1fr !important; gap: 8px !important; }
+
+    /* Modal full-width */
+    .modal-box { width: calc(100vw - 24px); padding: 18px; }
+
+    /* Calendar booking labels */
+    .cal-cell div[style*="font-size:8px"] { font-size: 7px !important; }
+
+    /* Touch target improvements */
+    .nav-item { padding: 10px 18px !important; }
+    .btn-sm { min-height: 36px; }
   }
 </style>
 </head>
