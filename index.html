@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Travellir — Property Management</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -27,7 +27,7 @@
     --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
     --shadow-glow: 0 0 20px rgba(201,168,76,0.08);
   }
-  html, body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'; }
+  html, body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'; overflow-x: hidden; }
   img, svg { display: block; max-width: 100%; }
   ::selection { background: rgba(201,168,76,0.25); color: var(--navy); }
 
@@ -88,7 +88,7 @@
   .user-role { font-size: 11px; color: var(--sidebar-dim); letter-spacing: -0.1px; }
 
   /* MAIN */
-  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); position: relative; }
+  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); position: relative; max-width: 100%; }
   .top-bar { padding: 18px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface); flex-shrink: 0; position: relative; z-index: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .page-title { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
   .page-sub { font-size: 12px; color: var(--muted); margin-top: 3px; letter-spacing: -0.1px; }
@@ -97,7 +97,7 @@
   .btn-sm:hover { background: var(--surface2); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
   .btn-amber { background: linear-gradient(135deg, var(--amber), #b8963f); color: #fff; border-color: transparent; font-weight: 700; box-shadow: 0 2px 8px rgba(201,168,76,0.25); }
   .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,168,76,0.35); background: linear-gradient(135deg, var(--amber), #b8963f); }
-  .page-content { flex: 1; overflow-y: auto; padding: 28px; position: relative; z-index: 1; }
+  .page-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 28px; position: relative; z-index: 1; max-width: 100vw; }
 
   /* TABS */
   .tab-row { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
@@ -284,7 +284,9 @@
     .btn-sm { padding: 7px 12px; font-size: 11px; }
 
     /* Content */
-    .page-content { padding: 16px; }
+    .page-content { padding: 16px; overflow-x: hidden; word-break: break-word; }
+    #app { overflow-x: hidden; }
+    * { max-width: 100%; }
 
     /* Stats — 2-col on mobile */
     .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
@@ -478,7 +480,7 @@
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sidebar-top">
-      <div class="s-logo"><div class="s-logo-mark" style="width:36px;height:36px;background:none;box-shadow:none;overflow:hidden;border-radius:8px;"><img src="Travellir-logo.png.webp" alt="Traveliir" style="width:100%;height:100%;object-fit:contain;"></div>Travel<span>iir</span></div>
+      <div class="s-logo"><img src="Travellir-logo.png.webp" alt="Traveliir" style="height:38px;width:auto;"></div>
       <div class="s-account">Premier Rentals</div>
     </div>
     <div class="nav-section">
