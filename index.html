@@ -1433,49 +1433,77 @@ function showMaintPopover(e, popId, label, day) {
 
 // ─── CLEANING SCHEDULES ────────────────────────────────────────────────
 function renderCleaning(p) {
-  const turnovers = [
-    { id:1, prop:'Boca Raton Beachside', addr:'2210 Palmetto Park Rd', checkout:'11:00 AM', checkin:'3:00 PM', crew:'Sparkle Clean Co.', crewPhone:'561-555-0199', status:'in_progress', beds:3, baths:2, sqft:'1,850', notes:'Guest had dog — extra pet treatment needed' },
-    { id:2, prop:'Marlinton Mountain Cabin', addr:'88 Marlinton Pike', checkout:'11:00 AM', checkin:'4:00 PM', crew:'Mountain Maids WV', crewPhone:'304-555-0166', status:'scheduled', beds:2, baths:1, sqft:'1,200', notes:'' },
-    { id:3, prop:'Old Town Scottsdale Casa', addr:'712 Scottsdale Rd', checkout:'10:00 AM', checkin:'3:00 PM', crew:'Desert Fresh Cleaning', crewPhone:'480-555-0211', status:'completed', beds:4, baths:3, sqft:'2,400', notes:'Restocked toiletries and coffee pods' },
-    { id:4, prop:'Snowshoe Ski Retreat', addr:'14 Snowshoe Dr', checkout:'11:00 AM', checkin:'—', crew:'Mountain Maids WV', crewPhone:'304-555-0166', status:'scheduled', beds:3, baths:2, sqft:'1,600', notes:'No check-in today — deep clean window' },
+  // Build today's turnovers dynamically from STR properties with booked day 17 (Apr 17)
+  const todayDay = 17;
+  const flCrews = [
+    { crew:'Sparkle Clean Co.', phone:'561-555-0199', markets:['FL'] },
+    { crew:'Sunshine Maids FL', phone:'561-555-0210', markets:['FL'] },
+    { crew:'Pro Clean Boca', phone:'561-555-0225', markets:['FL'] },
   ];
+  const marketCrews = {
+    FL: flCrews,
+    WV: [{ crew:'Mountain Maids WV', phone:'304-555-0166', markets:['WV'] }],
+    AZ: [{ crew:'Desert Fresh Cleaning', phone:'480-555-0211', markets:['AZ'] }],
+  };
+  // Properties with checkout today (booked day includes todayDay)
+  const todayTurnovers = PROPERTIES
+    .filter(pr => pr.booked && pr.booked.includes(todayDay - 1)) // checkout yesterday = today is turnover
+    .slice(0, 12); // cap display at 12 for readability
+  // Augment with fixed showcase turnovers for realism
+  const showcaseTurnovers = [
+    { prop:'Boca Raton Beachside', addr:'2210 Palmetto Park Rd, Boca Raton', checkout:'11:00 AM', checkin:'3:00 PM', crew:'Sparkle Clean Co.', crewPhone:'561-555-0199', status:'in_progress', beds:3, baths:2, sqft:'1,850', notes:'Guest had dog — extra pet treatment needed' },
+    { prop:'Boca Raton Palms A', addr:'320 W Palmetto Park Rd, Boca Raton', checkout:'11:00 AM', checkin:'3:00 PM', crew:'Sparkle Clean Co.', crewPhone:'561-555-0199', status:'scheduled', beds:2, baths:2, sqft:'1,400', notes:'' },
+    { prop:'Boca Raton Palms B', addr:'322 W Palmetto Park Rd, Boca Raton', checkout:'11:00 AM', checkin:'4:00 PM', crew:'Sunshine Maids FL', crewPhone:'561-555-0210', status:'scheduled', beds:2, baths:2, sqft:'1,400', notes:'' },
+    { prop:'Delray Beach Sunset Unit 1', addr:'101 SE Ocean Blvd, Delray Beach', checkout:'10:00 AM', checkin:'3:00 PM', crew:'Sunshine Maids FL', crewPhone:'561-555-0210', status:'scheduled', beds:2, baths:1, sqft:'1,100', notes:'' },
+    { prop:'Delray Beach Sunset Unit 3', addr:'105 SE Ocean Blvd, Delray Beach', checkout:'11:00 AM', checkin:'3:00 PM', crew:'Sunshine Maids FL', crewPhone:'561-555-0210', status:'completed', beds:2, baths:1, sqft:'1,100', notes:'Restocked toiletries & coffee pods' },
+    { prop:'West Palm Beach Marina Suite 1', addr:'200 Clematis St, West Palm Beach', checkout:'10:00 AM', checkin:'2:00 PM', crew:'Pro Clean Boca', crewPhone:'561-555-0225', status:'inspected', beds:1, baths:1, sqft:'850', notes:'' },
+    { prop:'Fort Lauderdale Canal Home 1', addr:'1801 SE 15th St, Fort Lauderdale', checkout:'11:00 AM', checkin:'3:00 PM', crew:'Pro Clean Boca', crewPhone:'561-555-0225', status:'scheduled', beds:3, baths:2, sqft:'1,900', notes:'' },
+    { prop:'Marlinton Mountain Cabin', addr:'88 Marlinton Pike, Marlinton WV', checkout:'11:00 AM', checkin:'4:00 PM', crew:'Mountain Maids WV', crewPhone:'304-555-0166', status:'scheduled', beds:2, baths:1, sqft:'1,200', notes:'' },
+    { prop:'Old Town Scottsdale Casa', addr:'712 Scottsdale Rd, Scottsdale AZ', checkout:'10:00 AM', checkin:'3:00 PM', crew:'Desert Fresh Cleaning', crewPhone:'480-555-0211', status:'completed', beds:4, baths:3, sqft:'2,400', notes:'Restocked toiletries and coffee pods' },
+  ];
+  const turnovers = showcaseTurnovers;
+  const inProgress = turnovers.filter(t=>t.status==='in_progress').length;
+  const completed = turnovers.filter(t=>t.status==='completed'||t.status==='inspected').length;
+  const scheduled = turnovers.filter(t=>t.status==='scheduled').length;
+  // Count unique crews
+  const uniqueCrews = [...new Set(turnovers.map(t=>t.crew))].length;
 
-  const statusMap = { scheduled:['Scheduled','var(--amber)','rgba(245,158,11,0.08)'], in_progress:['In Progress','var(--blue)','rgba(59,130,246,0.08)'], completed:['Completed','var(--green)','rgba(34,197,94,0.08)'], inspected:['Inspected','#8b5cf6','rgba(139,92,246,0.08)'] };
+  const statusMap = { scheduled:['Scheduled','var(--amber)','rgba(245,158,11,0.08)'], in_progress:['In Progress','var(--blue)','rgba(59,130,246,0.08)'], completed:['Completed','var(--green)','rgba(34,197,94,0.08)'], inspected:['Inspected ✓','#8b5cf6','rgba(139,92,246,0.08)'] };
 
   p.innerHTML = `
     <!-- Cleaning Stats -->
     <div class="stat-grid" style="margin-bottom:20px;">
       <div class="stat-card" style="border-left:3px solid var(--amber);">
         <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div class="stat-val" style="color:var(--amber);">4</div>
+          <div class="stat-val" style="color:var(--amber);">${turnovers.length}</div>
           <div style="width:40px;height:40px;border-radius:12px;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--amber)" stroke-width="1.5"><path d="M8 1v4M4.5 2.5l2 3M11.5 2.5l-2 3"/><rect x="3" y="6" width="10" height="8" rx="2"/></svg></div>
         </div>
         <div class="stat-label">Today's Turnovers</div>
-        <div class="stat-change">4 properties need cleaning</div>
+        <div class="stat-change">${scheduled} scheduled · ${inProgress} in progress</div>
       </div>
       <div class="stat-card" style="border-left:3px solid var(--blue);">
         <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div class="stat-val" style="color:var(--blue);">1</div>
+          <div class="stat-val" style="color:var(--blue);">${inProgress}</div>
           <div style="width:40px;height:40px;border-radius:12px;background:rgba(59,130,246,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5"/></svg></div>
         </div>
         <div class="stat-label">In Progress</div>
-        <div class="stat-change">Boca Raton Beachside</div>
+        <div class="stat-change">${inProgress > 0 ? turnovers.filter(t=>t.status==='in_progress').map(t=>t.prop.split(' ').slice(0,2).join(' ')).join(', ') : 'None active'}</div>
       </div>
       <div class="stat-card" style="border-left:3px solid var(--green);">
         <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div class="stat-val" style="color:var(--green);">1</div>
+          <div class="stat-val" style="color:var(--green);">${completed}</div>
           <div style="width:40px;height:40px;border-radius:12px;background:rgba(34,197,94,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M4 8l3 3 5-6"/></svg></div>
         </div>
-        <div class="stat-label">Completed</div>
+        <div class="stat-label">Completed / Inspected</div>
         <div class="stat-change up">Ready for guest</div>
       </div>
       <div class="stat-card" style="border-left:3px solid #8b5cf6;">
         <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div class="stat-val">3</div>
+          <div class="stat-val">${uniqueCrews}</div>
           <div style="width:40px;height:40px;border-radius:12px;background:rgba(139,92,246,0.08);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#8b5cf6" stroke-width="1.5"><circle cx="5.5" cy="5" r="2.5"/><circle cx="10.5" cy="5" r="2.5"/><path d="M1 14c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/></svg></div>
         </div>
-        <div class="stat-label">Cleaning Crews</div>
-        <div class="stat-change">Across 3 markets</div>
+        <div class="stat-label">Crews Active</div>
+        <div class="stat-change">FL · WV · AZ</div>
       </div>
     </div>
 
@@ -1839,30 +1867,68 @@ function showAiConfig() {
 
 // ─── OWNERS ────────────────────────────────────────────────────────────
 const OWNER_DATA = [
+  { name:'Jerell Figueroa', email:'jerell@travellir.com', phone:'561-555-0100', since:'Jan 2022', payout:'1st of month', color:'var(--amber)', badge:'Portfolio Owner' },
+  { name:'Mona Homes LLC', email:'ops@monahomes.com', phone:'561-555-0300', since:'Sep 2024', payout:'1st of month', color:'#8b5cf6', badge:'32 FL properties' },
   { name:'Sarah Mitchell', email:'sarah@mitchellhomes.com', phone:'304-555-0177', since:'Jan 2023', payout:'1st of month', color:'#3b82f6' },
   { name:'Tom & Diane Beckett', email:'becketts@gmail.com', phone:'304-555-0201', since:'Mar 2023', payout:'15th of month', color:'#16a34a' },
-  { name:'Mona Homes LLC', email:'ops@monahomes.com', phone:'561-555-0300', since:'Sep 2024', payout:'1st of month', color:'#8b5cf6', badge:'16 properties in pipeline' },
   { name:'Anthony Reyes', email:'anthony.reyes@outlook.com', phone:'480-555-0188', since:'Nov 2024', payout:'1st of month', color:'#f59e0b' },
 ];
 
 function renderOwners(p) {
+  const strRev = PROPERTIES.reduce((s,pr) => s + parseInt(pr.revenue.replace(/[$,]/g,'')), 0);
+  const glRev = GROUP_LIVING_PROPS.reduce((s,gl) => s + parseInt(gl.monthlyGross.replace(/[$,]/g,'')), 0);
+  const totalPortfolio = PROPERTIES.length + GROUP_LIVING_PROPS.length;
   p.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+      <div class="stat-card" style="border-left:3px solid var(--green);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--green);">$${((strRev+glRev)/1000).toFixed(1)}k</div>
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--green-soft);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M2 14V8h3v6"/><path d="M6.5 14V5h3v9"/><path d="M11 14V2h3v12"/></svg></div>
+        </div>
+        <div class="stat-label">Portfolio Revenue / mo</div>
+        <div class="stat-change up">STR + Group Living combined</div>
+      </div>
+      <div class="stat-card" style="border-left:3px solid var(--blue);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:var(--blue);">${totalPortfolio}</div>
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5"><path d="M2 6.5L8 2l6 4.5V14H2V6.5z"/><path d="M6 14V9h4v5"/></svg></div>
+        </div>
+        <div class="stat-label">Total Properties</div>
+        <div class="stat-change up">FL, WV & AZ markets</div>
+      </div>
+      <div class="stat-card" style="border-left:3px solid #8b5cf6;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="stat-val" style="color:#8b5cf6;">${OWNER_DATA.length}</div>
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(139,92,246,0.08);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#8b5cf6" stroke-width="1.5"><circle cx="5.5" cy="5" r="2.5"/><circle cx="10.5" cy="5" r="2.5"/><path d="M1 14c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/><path d="M10.5 10c2.5 0 4.5 1.5 4.5 4"/></svg></div>
+        </div>
+        <div class="stat-label">Property Owners</div>
+        <div class="stat-change">All on 1st or 15th payout</div>
+      </div>
+    </div>
     <div class="section-hdr"><div class="section-title">Owner Accounts</div></div>
     <div style="display:flex;flex-direction:column;gap:10px;">
-      ${OWNER_DATA.map((o,i)=>{
-        const props = PROPERTIES.filter(pr=>pr.owner===o.name);
-        const rev = props.reduce((s,pr)=>s+parseInt(pr.revenue.replace(/[$,]/g,'')),0);
+      ${OWNER_DATA.map((o,i) => {
+        const strProps = PROPERTIES.filter(pr => pr.owner === o.name);
+        const glProps = GROUP_LIVING_PROPS.filter(gl => gl.owner === o.name);
+        const strRevO = strProps.reduce((s,pr) => s + parseInt(pr.revenue.replace(/[$,]/g,'')), 0);
+        const glRevO = glProps.reduce((s,gl) => s + parseInt(gl.monthlyGross.replace(/[$,]/g,'')), 0);
+        const totalRevO = strRevO + glRevO;
+        const totalPropsO = strProps.length + glProps.length;
+        const markets = [...new Set([...strProps.map(p=>p.market), ...glProps.map(g=>g.market)])];
         const initials = o.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
         return `
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-sm);">
-            <div style="width:42px;height:42px;border-radius:50%;background:${o.color}10;border:1.5px solid ${o.color}40;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:${o.color};flex-shrink:0;">${initials}</div>
+            <div style="width:44px;height:44px;border-radius:50%;background:${o.color}10;border:1.5px solid ${o.color}40;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:${o.color};flex-shrink:0;">${initials}</div>
             <div style="flex:1;">
-              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:14px;font-weight:600;">${o.name}</span>${o.badge?`<span style="font-size:9px;font-weight:700;background:rgba(139,92,246,0.08);color:#8b5cf6;padding:2px 8px;border-radius:10px;border:1px solid rgba(139,92,246,0.15);">${o.badge}</span>`:''}</div>
-              <div style="font-size:11px;color:var(--muted);margin-top:2px;">${props.length} propert${props.length===1?'y':'ies'} · ${props.map(pr=>pr.market).filter((v,i,a)=>a.indexOf(v)===i).join(', ')}</div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:14px;font-weight:700;color:var(--navy);">${o.name}</span>
+                ${o.badge ? `<span style="font-size:9px;font-weight:700;background:${o.color}12;color:${o.color};padding:2px 8px;border-radius:10px;border:1px solid ${o.color}25;">${o.badge}</span>` : ''}
+              </div>
+              <div style="font-size:11px;color:var(--muted);margin-top:3px;">${totalPropsO} propert${totalPropsO===1?'y':'ies'} · ${markets.join(', ')} · Payout: ${o.payout}</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size:16px;font-weight:700;color:var(--green);">$${rev.toLocaleString()}/mo</div>
-              <div style="font-size:11px;color:var(--muted);margin-top:2px;">combined revenue</div>
+              <div style="font-size:18px;font-weight:700;color:var(--green);">$${totalRevO.toLocaleString()}/mo</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px;">combined revenue</div>
             </div>
             <button class="btn-sm" style="margin-left:8px;" onclick="showOwnerModal(${i})">View Portal →</button>
           </div>
@@ -1874,34 +1940,46 @@ function renderOwners(p) {
 
 function showOwnerModal(idx) {
   const o = OWNER_DATA[idx];
-  const props = PROPERTIES.filter(pr=>pr.owner===o.name);
-  const rev = props.reduce((s,pr)=>s+parseInt(pr.revenue.replace(/[$,]/g,'')),0);
+  const strProps = PROPERTIES.filter(pr => pr.owner === o.name);
+  const glProps = GROUP_LIVING_PROPS.filter(gl => gl.owner === o.name);
+  const strRevO = strProps.reduce((s,pr) => s + parseInt(pr.revenue.replace(/[$,]/g,'')), 0);
+  const glRevO = glProps.reduce((s,gl) => s + parseInt(gl.monthlyGross.replace(/[$,]/g,'')), 0);
+  const totalRevO = strRevO + glRevO;
+  const allProps = strProps; // show STR props in modal list (GL shown separately)
   const initials = o.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   const box = document.getElementById('modalBox');
+  const mgmtFee = Math.round(totalRevO * 0.12);
+  const ownerNet = totalRevO - mgmtFee;
   box.innerHTML = `
     <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
       <div style="width:52px;height:52px;border-radius:50%;background:${o.color}12;border:2px solid ${o.color}40;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:${o.color};flex-shrink:0;">${initials}</div>
       <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:17px;font-weight:700;color:var(--navy);">${o.name}</span>${o.badge?`<span style="font-size:9px;font-weight:700;background:rgba(139,92,246,0.08);color:#8b5cf6;padding:2px 8px;border-radius:10px;border:1px solid rgba(139,92,246,0.15);">${o.badge}</span>`:''}</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:17px;font-weight:700;color:var(--navy);">${o.name}</span>${o.badge?`<span style="font-size:9px;font-weight:700;background:${o.color}12;color:${o.color};padding:2px 8px;border-radius:10px;border:1px solid ${o.color}25;">${o.badge}</span>`:''}</div>
         <div style="font-size:12px;color:var(--muted);margin-top:3px;">${o.email} · ${o.phone}</div>
       </div>
       <button onclick="closeModal()" style="background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:4px;">✕</button>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
-      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Owner Since</div><div style="font-size:14px;font-weight:600;">${o.since}</div></div>
-      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Payout Day</div><div style="font-size:14px;font-weight:600;">${o.payout}</div></div>
-      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Monthly Rev</div><div style="font-size:14px;font-weight:700;color:var(--green);">$${rev.toLocaleString()}</div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
+      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Owner Since</div><div style="font-size:13px;font-weight:600;">${o.since}</div></div>
+      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Payout Day</div><div style="font-size:13px;font-weight:600;">${o.payout}</div></div>
+      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Gross Rev</div><div style="font-size:13px;font-weight:700;color:var(--green);">$${totalRevO.toLocaleString()}</div></div>
+      <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;text-align:center;"><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Net to Owner</div><div style="font-size:13px;font-weight:700;color:var(--navy);">$${ownerNet.toLocaleString()}</div></div>
     </div>
-    <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Properties (${props.length})</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;max-height:200px;overflow-y:auto;">
-      ${props.map(pr=>{
+    ${glProps.length > 0 ? `
+    <div style="background:rgba(139,92,246,0.04);border:1px solid rgba(139,92,246,0.15);border-radius:var(--radius);padding:12px 14px;margin-bottom:16px;">
+      <div style="font-size:10px;font-weight:700;color:#8b5cf6;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Group Living (${glProps.length} properties)</div>
+      ${glProps.map(gl => `<div style="font-size:12px;color:var(--text);margin-bottom:2px;">• ${gl.name} — ${gl.monthlyGross}/mo gross · ${gl.tenants.filter(t=>t.status!=='vacant').length}/${gl.totalRooms} rooms occupied</div>`).join('')}
+    </div>` : ''}
+    <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">STR Properties (${allProps.length})</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;max-height:180px;overflow-y:auto;">
+      ${allProps.map(pr => {
         const issues = pr.issues.filter(i=>i.status==='open').length;
         return `
         <div style="background:var(--bg);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:12px;">
           <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${pr.name}</div><div style="font-size:11px;color:var(--muted);">${pr.market}</div></div>
           <div style="font-size:13px;font-weight:600;color:var(--navy);">${pr.revenue}</div>
           <div style="font-size:11px;color:var(--muted);">${pr.occupancy}</div>
-          ${issues>0?`<div style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:var(--red-soft);color:var(--red);">${issues} issue${issues>1?'s':''}</div>`:`<div style="font-size:10px;color:var(--green);">No issues</div>`}
+          ${issues>0?`<div style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:var(--red-soft);color:var(--red);">${issues} issue${issues>1?'s':''}</div>`:`<div style="font-size:10px;color:var(--green);">✓ Clear</div>`}
         </div>`;
       }).join('')}
     </div>
