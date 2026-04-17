@@ -182,8 +182,8 @@
   .cal-cell:hover { background: var(--surface2); }
   .cal-num { font-size: 12px; font-weight: 500; }
   .cal-empty { }
-  .cal-avail { color: var(--muted); }
-  .cal-booked { background: rgba(201,168,76,0.1); color: #a08930; font-weight: 600; }
+  .cal-avail { background: var(--surface); color: var(--dim); border: 1px solid var(--border); }
+  .cal-booked { background: rgba(201,168,76,0.22); color: #8a7220; font-weight: 700; border: 1px solid rgba(201,168,76,0.4); box-shadow: inset 3px 0 0 var(--amber); }
   .cal-maint { background: var(--red-soft); color: var(--red); }
   .cal-today { box-shadow: inset 0 0 0 2px var(--amber); color: var(--text); font-weight: 700; }
   .cal-legend { display: flex; gap: 16px; margin-top: 14px; }
@@ -986,7 +986,18 @@ function renderDetail(p) {
   renderDetailTab();
 }
 
-function switchDetailTab(tab) { currentDetailTab = tab; renderDetailTab(); }
+function switchDetailTab(tab) {
+  currentDetailTab = tab;
+  // Update tab button active states without full re-render
+  document.querySelectorAll('.tab-row .tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+    const label = btn.textContent.toLowerCase();
+    if (tab === 'issues' && label.includes('maintenance')) btn.classList.add('active');
+    else if (tab === 'vendors' && label.includes('vendors')) btn.classList.add('active');
+    else if (tab === 'calendar' && label.includes('booking')) btn.classList.add('active');
+  });
+  renderDetailTab();
+}
 
 function renderDetailTab() {
   const pr = currentProp;
