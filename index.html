@@ -90,7 +90,7 @@
   .user-role { font-size: 11px; color: var(--sidebar-dim); letter-spacing: -0.1px; }
 
   /* MAIN */
-  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); position: relative; max-width: 100%; }
+  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); position: relative; min-width: 0; width: 100%; }
   .top-bar { padding: 18px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface); flex-shrink: 0; position: relative; z-index: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .page-title { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
   .page-sub { font-size: 12px; color: var(--muted); margin-top: 3px; letter-spacing: -0.1px; }
@@ -278,16 +278,20 @@
     /* Hamburger visible */
     .mobile-toggle { display: flex; }
 
-    /* Top bar */
-    .top-bar { padding: 14px 16px; gap: 8px; }
-    .page-title { font-size: 16px; }
-    .page-subtitle { font-size: 11px; }
-    .top-actions { gap: 6px; }
-    .btn-sm { padding: 7px 12px; font-size: 11px; }
+    /* Top bar — prevent overflow on narrow screens */
+    .top-bar { padding: 12px 14px; gap: 8px; flex-wrap: nowrap; min-width: 0; }
+    .top-bar > div:first-child { min-width: 0; flex: 1; overflow: hidden; }
+    .page-title { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .page-sub { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .top-actions { gap: 6px; flex-shrink: 0; }
+    .btn-sm { padding: 7px 10px; font-size: 11px; white-space: nowrap; }
+
+    /* Main gets full width when sidebar slides off */
+    #main { width: 100%; min-width: 0; }
+    #app { overflow-x: hidden; display: flex; flex-direction: column; }
 
     /* Content */
-    .page-content { padding: 16px; overflow-x: hidden; }
-    #app { overflow-x: hidden; }
+    .page-content { padding: 14px; overflow-x: hidden; }
 
     /* Stats — 2-col on mobile */
     .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
@@ -306,12 +310,16 @@
     .mf-btn { padding: 6px 14px; font-size: 11px; }
 
     /* Calendar */
-    .cal-wrapper { padding: 14px; }
-    .cal-cell { border-radius: 6px; }
-    .cal-num { font-size: 11px; }
-    .cal-day-hdr { font-size: 9px; padding: 4px 0; }
-    .cal-legend { flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .cal-wrapper { padding: 12px; }
+    .cal-cell { border-radius: 6px; min-height: 48px; }
+    .cal-num { font-size: 10px; }
+    .cal-day-hdr { font-size: 8px; padding: 3px 0; }
+    .cal-legend { flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .next-booking { padding: 12px 14px; flex-direction: column; gap: 10px; align-items: flex-start; }
+    /* Calendar top controls — stack on mobile */
+    #calControls { flex-wrap: wrap !important; gap: 8px !important; }
+    #calControls select { width: 100% !important; }
+    #calControls > div:last-child { margin-left: 0 !important; width: 100%; display: flex; justify-content: space-between; }
 
     /* Calendar booking popovers — full-width on mobile */
     .cal-cell { position: relative; }
@@ -572,13 +580,26 @@
 <script>
 // ─── MOBILE SIDEBAR ──────────────────────────────────────────────────
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebarOverlay').classList.toggle('show');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+  // Lock body scroll when open
+  document.body.style.overflow = isOpen ? 'hidden' : '';
 }
 function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('show');
+  document.body.style.overflow = '';
 }
+// Auto-close sidebar when a nav item is tapped on mobile
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.nav-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      if (window.innerWidth <= 768) closeSidebar();
+    });
+  });
+});
 
 // ─── DATA ─────────────────────────────────────────────────────────────
 const PROPERTIES = [
@@ -1268,7 +1289,7 @@ let calPropIdx = 0;
 function renderCalendarPage(p) {
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   p.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
+    <div id="calControls" style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
       <div style="display:flex;align-items:center;gap:10px;">
         <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;">Property</label>
         <select id="calPropSelect" onchange="calChangeProp(this.value)"
