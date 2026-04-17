@@ -729,7 +729,23 @@ function renderDashboard(p) {
   const open = allIssues.filter(i => i.status === 'open').length;
   const inprog = allIssues.filter(i => i.status === 'in progress').length;
   const urgent = PROPERTIES.filter(pr => pr.status === 'alert').length;
-  const totalRev = PROPERTIES.reduce((s,pr) => s + parseInt(pr.revenue.replace(/[$,]/g,'')), 0);
+  const strRev = PROPERTIES.reduce((s,pr) => s + parseInt(pr.revenue.replace(/[$,]/g,'')), 0);
+  const glRev = GROUP_LIVING_PROPS.reduce((s,gl) => s + parseInt(gl.monthlyGross.replace(/[$,]/g,'')), 0);
+  const totalRev = strRev + glRev;
+
+  // Lease expiration logic — flag leases ending within 60 days
+  const today = new Date('2026-04-17');
+  const expiringLeases = GROUP_LIVING_PROPS.flatMap(gl =>
+    gl.tenants
+      .filter(t => t.status !== 'vacant' && t.leaseEnd !== '—')
+      .map(t => {
+        const end = new Date(t.leaseEnd);
+        const daysLeft = Math.round((end - today) / (1000*60*60*24));
+        return { ...t, propName: gl.name, daysLeft };
+      })
+      .filter(t => t.daysLeft <= 90)
+      .sort((a,b) => a.daysLeft - b.daysLeft)
+  );
 
   p.innerHTML = `
     <!-- HIGH PRIORITY BANNER -->
@@ -772,11 +788,11 @@ function renderDashboard(p) {
       </div>
       <div class="stat-card" style="border-left:3px solid var(--green);">
         <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div class="stat-val" style="color:var(--green)">$${(totalRev/1000).toFixed(0)}k</div>
+          <div class="stat-val" style="color:var(--green)">$${(totalRev/1000).toFixed(1)}k</div>
           <div style="width:40px;height:40px;border-radius:12px;background:var(--green-soft);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M2 14V8h3v6"/><path d="M6.5 14V5h3v9"/><path d="M11 14V2h3v12"/></svg></div>
         </div>
         <div class="stat-label">Est. Monthly Rev</div>
-        <div class="stat-change up">▲ 12% from last month</div>
+        <div class="stat-change up">STR $${(strRev/1000).toFixed(1)}k + Group Living $${(glRev/1000).toFixed(1)}k</div>
       </div>
     </div>
 
@@ -795,12 +811,32 @@ function renderDashboard(p) {
       `).join('')}
     </div>
 
+    <!-- LEASE EXPIRATION ALERTS -->
+    ${expiringLeases.length > 0 ? `
+    <div class="alerts-section" style="margin-bottom:16px;border-left:3px solid #8b5cf6;">
+      <div class="section-hdr"><div class="section-title" style="color:#8b5cf6;">📋 Lease Renewals Due</div><div style="font-size:11px;color:var(--muted);">${expiringLeases.length} expiring within 90 days</div></div>
+      ${expiringLeases.map(t => {
+        const urgency = t.daysLeft <= 30 ? 'var(--red)' : t.daysLeft <= 60 ? 'var(--amber)' : '#8b5cf6';
+        const label = t.daysLeft <= 30 ? 'URGENT' : t.daysLeft <= 60 ? 'Soon' : 'Upcoming';
+        return `
+        <div class="alert-row">
+          <div class="alert-dot" style="background:${urgency};"></div>
+          <div>
+            <div class="alert-text">${t.name} — ${t.room}</div>
+            <div class="alert-prop">${t.propName} · Lease ends ${t.leaseEnd}</div>
+          </div>
+          <span style="font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;background:${urgency}15;color:${urgency};text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;">${label} · ${t.daysLeft}d left</span>
+          <button class="btn-sm" onclick="nav('groupliving',document.querySelector('[onclick*=groupliving]'))" style="font-size:11px;padding:5px 10px;">Manage →</button>
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
       <div>
         <div class="section-hdr"><div class="section-title">Properties by Market</div></div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           ${[['WV','West Virginia',PROPERTIES.filter(p=>p.market==='WV').length,'#5b8ff9'],
-             ['FL','Boca Raton, FL',PROPERTIES.filter(p=>p.market==='FL').length,'#4caf7d'],
+             ['FL','South Florida (STR + Group Living)',PROPERTIES.filter(p=>p.market==='FL').length + GROUP_LIVING_PROPS.filter(g=>g.market==='FL').length,'#4caf7d'],
              ['AZ','Scottsdale, AZ',PROPERTIES.filter(p=>p.market==='AZ').length,'#f0a030']].map(([code,name,count,color])=>`
             <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;display:flex;align-items:center;gap:14px;transition:all 0.2s;cursor:pointer;" onmouseover="this.style.borderColor='${color}30';this.style.transform='translateX(3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
               <div style="width:40px;height:40px;border-radius:10px;background:${color}12;border:1px solid ${color}25;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:${color};letter-spacing:0.5px;">${code}</div>
