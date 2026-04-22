@@ -497,6 +497,19 @@ ul, ol { list-style: none; }
   overflow: hidden;
 }
 
+/* Snowshoe Mountain hero background photograph */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/images/snowshoe-hero.png');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  opacity: 0.25;
+  z-index: 0;
+}
+
 /* Cinematic noise texture overlay */
 .hero::before {
   content: '';

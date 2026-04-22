@@ -294,7 +294,7 @@
         'Check-Out: ' + checkout
       );
 
-      window.location.href = 'mailto:bookings@travellir.com?subject=' + subject + '&body=' + body;
+      window.location.href = 'mailto:Support@travellermanagement.com?subject=' + subject + '&body=' + body;
     });
   }
 
