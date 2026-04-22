@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Properties — Travellir Premier Rentals</title>
+  <meta name="description" content="Browse all 41 Travellir rental properties across South Florida, West Virginia, and Arizona. Filter by stay type and location.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/webp" href="assets/images/logo.webp">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <!-- Page Hero -->
+  <section class="page-hero" id="properties-hero">
+    <div class="page-hero__bg"></div>
+    <div class="container">
+      <p class="text-label reveal" style="color:var(--gold-400);">Our Collection</p>
+      <h1 class="heading-section reveal" style="color:var(--white);font-size:clamp(2rem,5vw,3.2rem);">All Properties</h1>
+      <p class="text-body reveal" style="color:rgba(255,255,255,0.6);max-width:560px;margin:var(--space-md) auto 0;">Each space is thoughtfully designed to feel like home — whether you're here for a weekend getaway or an extended stay.</p>
+    </div>
+  </section>
+
+  <!-- Hostfully Search Widget -->
+  <section class="section" style="padding-top:var(--space-2xl);padding-bottom:0;">
+    <div class="container">
+      <div class="hostfully-search__inner reveal" id="hostfully-properties-widget">
+        <div class="hostfully-search__placeholder">
+          <div class="hostfully-search__fields">
+            <div class="hostfully-search__field">
+              <label>Location</label>
+              <select class="form-input"><option>All Markets</option><option>South Florida</option><option>West Virginia</option><option>Arizona</option></select>
+            </div>
+            <div class="hostfully-search__field">
+              <label>Check-In</label>
+              <input type="date" class="form-input">
+            </div>
+            <div class="hostfully-search__field">
+              <label>Check-Out</label>
+              <input type="date" class="form-input">
+            </div>
+            <div class="hostfully-search__field">
+              <label>Guests</label>
+              <select class="form-input"><option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4+ Guests</option></select>
+            </div>
+            <button class="btn btn--primary hostfully-search__btn" onclick="alert('Hostfully widget will replace this when embed codes are provided.')">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Tabs + Property Grid -->
+  <section class="properties section" id="properties">
+    <div class="container">
+      <div class="properties__filters reveal">
+        <button class="filter-tab active" data-filter="all">All Properties</button>
+        <button class="filter-tab" data-filter="str">Short-Term (STR)</button>
+        <button class="filter-tab" data-filter="mtr">Mid-Term (MTR)</button>
+        <button class="filter-tab" data-filter="ltr">Long-Term (LTR)</button>
+        <button class="filter-tab" data-filter="fl">South Florida</button>
+        <button class="filter-tab" data-filter="wv">West Virginia</button>
+        <button class="filter-tab" data-filter="az">Arizona</button>
+      </div>
+
+      <div class="properties__grid">
+        <!-- Property 1 — Pink Suite (Featured) -->
+        <article class="property-card property-card--featured reveal" data-type="str mtr" data-state="wv">
+          <div class="property-card__image">
+            <img src="assets/images/property-pink.webp" alt="Pink Suite" loading="lazy">
+            <div class="property-card__image-overlay"></div>
+            <div class="property-card__badge">
+              <span class="property-card__badge-item property-card__badge-item--popular">⭐ Most Popular</span>
+              <span class="property-card__badge-item">STR / MTR</span>
+            </div>
+            <button class="property-card__favorite" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="property-card__body">
+            <div class="property-card__location"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> West Virginia</div>
+            <h3 class="property-card__title">The Pink Suite Experience</h3>
+            <p class="property-card__desc">An Instagram-worthy retreat with curated neon signs, lush greenery walls, and ultra-plush furnishings. Perfect for couples and content creators.</p>
+            <div class="property-card__amenities">
+              <span class="property-card__amenity">🛏 2 Beds</span>
+              <span class="property-card__amenity">🛁 1 Bath</span>
+              <span class="property-card__amenity">👥 4 Guests</span>
+            </div>
+            <div class="property-card__footer">
+              <div class="property-card__price">$110 <span>/ night</span></div>
+              <div class="property-card__rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 5.0</div>
+            </div>
+            <div class="property-card__cta"><a href="property.html?id=pink-suite" class="btn btn--navy" style="font-size:0.78rem;padding:12px 24px;">View Details →</a></div>
+          </div>
+        </article>
+
+        <!-- Property 2 — Rustic Studio -->
+        <article class="property-card reveal reveal-delay-1" data-type="str mtr" data-state="wv">
+          <div class="property-card__image">
+            <img src="assets/images/property-studio.webp" alt="Rustic Studio" loading="lazy">
+            <div class="property-card__image-overlay"></div>
+            <div class="property-card__badge"><span class="property-card__badge-item">STR / MTR</span></div>
+            <button class="property-card__favorite" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="property-card__body">
+            <div class="property-card__location"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> West Virginia</div>
+            <h3 class="property-card__title">The Rustic Studio Retreat</h3>
+            <div class="property-card__amenities">
+              <span class="property-card__amenity">🛏 1 Bed</span>
+              <span class="property-card__amenity">🛁 1 Bath</span>
+              <span class="property-card__amenity">👥 2 Guests</span>
+            </div>
+            <div class="property-card__footer">
+              <div class="property-card__price">$95 <span>/ night</span></div>
+              <div class="property-card__rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 4.9</div>
+            </div>
+            <div class="property-card__cta"><a href="property.html?id=rustic-studio" class="btn btn--navy" style="font-size:0.78rem;padding:12px 24px;">View Details →</a></div>
+          </div>
+        </article>
+
+        <!-- Property 3 — Mountain Loft -->
+        <article class="property-card reveal reveal-delay-2" data-type="str mtr ltr" data-state="wv">
+          <div class="property-card__image">
+            <img src="assets/images/property-loft.webp" alt="Mountain View Loft" loading="lazy">
+            <div class="property-card__image-overlay"></div>
+            <div class="property-card__badge"><span class="property-card__badge-item">STR / MTR / LTR</span></div>
+            <button class="property-card__favorite" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="property-card__body">
+            <div class="property-card__location"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> West Virginia</div>
+            <h3 class="property-card__title">Mountain View Downtown Loft</h3>
+            <div class="property-card__amenities">
+              <span class="property-card__amenity">🛏 1 Bed</span>
+              <span class="property-card__amenity">🛁 1 Bath</span>
+              <span class="property-card__amenity">👥 3 Guests</span>
+            </div>
+            <div class="property-card__footer">
+              <div class="property-card__price">$85 <span>/ night</span></div>
+              <div class="property-card__rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 4.8</div>
+            </div>
+            <div class="property-card__cta"><a href="property.html?id=mountain-loft" class="btn btn--navy" style="font-size:0.78rem;padding:12px 24px;">View Details →</a></div>
+          </div>
+        </article>
+
+        <!-- Property 4 — WV Ranch -->
+        <article class="property-card reveal reveal-delay-3" data-type="str mtr ltr" data-state="wv">
+          <div class="property-card__image">
+            <img src="assets/images/property-rustic.webp" alt="WV Rustic Ranch" loading="lazy">
+            <div class="property-card__image-overlay"></div>
+            <div class="property-card__badge"><span class="property-card__badge-item">STR / LTR</span></div>
+            <button class="property-card__favorite" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="property-card__body">
+            <div class="property-card__location"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> West Virginia</div>
+            <h3 class="property-card__title">The WV Rustic Ranch</h3>
+            <div class="property-card__amenities">
+              <span class="property-card__amenity">🛏 3 Beds</span>
+              <span class="property-card__amenity">🛁 2 Baths</span>
+              <span class="property-card__amenity">👥 6 Guests</span>
+            </div>
+            <div class="property-card__footer">
+              <div class="property-card__price">$145 <span>/ night</span></div>
+              <div class="property-card__rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 4.9</div>
+            </div>
+            <div class="property-card__cta"><a href="property.html?id=wv-ranch" class="btn btn--navy" style="font-size:0.78rem;padding:12px 24px;">View Details →</a></div>
+          </div>
+        </article>
+
+        <!-- Property 5 — Arizona -->
+        <article class="property-card reveal reveal-delay-4" data-type="str mtr ltr" data-state="az">
+          <div class="property-card__image" style="background: linear-gradient(135deg, #1a0e00, #3d2200);">
+            <img src="assets/images/property-exterior.webp" alt="Arizona desert property" loading="lazy">
+            <div class="property-card__image-overlay"></div>
+            <div class="property-card__badge"><span class="property-card__badge-item">Coming Soon</span></div>
+          </div>
+          <div class="property-card__body">
+            <div class="property-card__location"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Arizona</div>
+            <h3 class="property-card__title">Desert Oasis — Arizona</h3>
+            <div class="property-card__amenities">
+              <span class="property-card__amenity">🛏 TBD</span>
+              <span class="property-card__amenity">🛁 TBD</span>
+              <span class="property-card__amenity">⏰ Launching Soon</span>
+            </div>
+            <div class="property-card__footer">
+              <div class="property-card__price" style="font-size:1rem;color:var(--dark-40);">Inquire for pricing</div>
+              <div class="property-card__rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> New</div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- FL Portfolio Banner -->
+      <div class="reveal" style="margin-top:var(--space-3xl);background:linear-gradient(135deg,var(--navy-900),var(--navy-800));border:1px solid var(--white-10);border-radius:var(--radius-xl);padding:var(--space-2xl) var(--space-xl);text-align:center;">
+        <p class="text-label" style="color:var(--gold-400);">South Florida Portfolio</p>
+        <h3 style="font-family:var(--font-display);font-size:1.6rem;color:var(--white);margin:var(--space-sm) 0;">34 Properties Across South Florida</h3>
+        <p style="color:rgba(255,255,255,0.5);font-size:0.92rem;max-width:480px;margin:var(--space-sm) auto var(--space-xl);">Boca Raton · Delray Beach · Fort Lauderdale · West Palm Beach · Pompano Beach and more — all managed by Travellir.</p>
+        <a href="contact.html" class="btn btn--primary">Inquire About FL Properties</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+  <script src="shared.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

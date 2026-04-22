@@ -137,7 +137,7 @@
           let show = false;
           if (filter === 'all') {
             show = true;
-          } else if (filter === 'wv' || filter === 'az') {
+          } else if (filter === 'fl' || filter === 'wv' || filter === 'az') {
             show = state === filter;
           } else {
             show = types.includes(filter);

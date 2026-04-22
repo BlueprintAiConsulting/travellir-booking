@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Travellir Premier Rentals</title>
+  <meta name="description" content="Get in touch with Travellir Premier Rentals. Send an inquiry, book a stay, or ask about our Group Living program.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/webp" href="assets/images/logo.webp">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <!-- Page Hero -->
+  <section class="page-hero" id="contact-hero">
+    <div class="page-hero__bg"></div>
+    <div class="container">
+      <p class="text-label reveal" style="color:var(--gold-400);">Get in Touch</p>
+      <h1 class="heading-section reveal" style="color:var(--white);font-size:clamp(2rem,5vw,3.2rem);">Contact Us</h1>
+      <p class="text-body reveal" style="color:rgba(255,255,255,0.6);max-width:560px;margin:var(--space-md) auto 0;">Ready to book your perfect stay? Send us an inquiry and we'll get back to you within 24 hours.</p>
+    </div>
+  </section>
+
+  <!-- Contact Form + Info -->
+  <section class="section" id="contact-form">
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Form -->
+        <div class="contact-form reveal">
+          <h2 style="font-family:var(--font-display);font-size:1.5rem;color:var(--dark);margin-bottom:var(--space-lg);">Send an Inquiry</h2>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="form-name">Your Name</label><input class="form-input" type="text" id="form-name" placeholder="John Smith" autocomplete="name"></div>
+            <div class="form-group"><label class="form-label" for="form-email">Email Address</label><input class="form-input" type="email" id="form-email" placeholder="you@email.com" autocomplete="email"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="form-property">Property Interest</label>
+              <select class="form-select form-input" id="form-property">
+                <option value="">Any Property</option>
+                <option value="pink-suite">The Pink Suite</option>
+                <option value="rustic-studio">Rustic Studio Retreat</option>
+                <option value="mountain-loft">Mountain View Loft</option>
+                <option value="wv-ranch">WV Rustic Ranch</option>
+                <option value="arizona">Arizona Desert Oasis</option>
+                <option value="boca-collective">Group Living — Boca Collective</option>
+                <option value="delray-house">Group Living — Delray House</option>
+                <option value="pompano-crest">Group Living — Pompano Crest</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="form-type">Stay Type</label>
+              <select class="form-select form-input" id="form-type">
+                <option value="">Select Type</option>
+                <option value="str">Short-Term (1–30 Days)</option>
+                <option value="mtr">Mid-Term (1–6 Months)</option>
+                <option value="ltr">Long-Term (6+ Months)</option>
+                <option value="group-living">Group Living (Month-to-Month)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="form-checkin">Check-In Date</label><input class="form-input" type="date" id="form-checkin"></div>
+            <div class="form-group"><label class="form-label" for="form-checkout">Check-Out Date</label><input class="form-input" type="date" id="form-checkout"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:var(--space-lg);">
+            <label class="form-label" for="form-message">Message (Optional)</label>
+            <textarea class="form-input" id="form-message" rows="4" placeholder="Tell us about your trip or any special requests..."></textarea>
+          </div>
+          <button class="btn btn--primary" id="form-submit-btn" style="width:100%;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Send Inquiry
+          </button>
+        </div>
+
+        <!-- Contact Info Sidebar -->
+        <div class="contact-sidebar reveal reveal-delay-1">
+          <div class="contact-info-card">
+            <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--dark);margin-bottom:var(--space-lg);">Quick Contact</h3>
+            <div class="contact-info-item">
+              <div class="contact-info-icon">✉️</div>
+              <div><div class="contact-info-label">Email</div><a href="mailto:bookings@travellir.com" class="contact-info-value">bookings@travellir.com</a></div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-icon">📞</div>
+              <div><div class="contact-info-label">Phone</div><a href="tel:+1234567890" class="contact-info-value">(123) 456-7890</a></div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-icon">⏰</div>
+              <div><div class="contact-info-label">Response Time</div><div class="contact-info-value">Within 24 hours</div></div>
+            </div>
+          </div>
+
+          <div class="contact-info-card" style="margin-top:var(--space-lg);">
+            <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--dark);margin-bottom:var(--space-lg);">Also Book Via</h3>
+            <div class="contact-booking-badges">
+              <div class="contact-badge">🏠 Airbnb</div>
+              <div class="contact-badge">🏡 VRBO</div>
+              <div class="contact-badge">✉️ Direct Booking</div>
+            </div>
+          </div>
+
+          <div class="contact-info-card" style="margin-top:var(--space-lg);">
+            <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--dark);margin-bottom:var(--space-lg);">Our Markets</h3>
+            <div class="contact-market"><span>🌴</span> South Florida — 34 Properties</div>
+            <div class="contact-market"><span>🏔️</span> West Virginia — 4+ Properties</div>
+            <div class="contact-market"><span>🌵</span> Arizona — Launching 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq" style="background:var(--cream);">
+    <div class="container" style="max-width:800px;">
+      <div style="text-align:center;margin-bottom:var(--space-2xl);">
+        <p class="text-label reveal">Common Questions</p>
+        <h2 class="heading-section reveal">Frequently Asked Questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary class="faq-question">What is the minimum stay?</summary>
+          <div class="faq-answer">Our minimum stay varies by property. Most short-term rentals have a 2-night minimum, while mid-term and long-term options start at 30 days. Group Living has a 1-month minimum with month-to-month flexibility.</div>
+        </details>
+        <details class="faq-item reveal reveal-delay-1">
+          <summary class="faq-question">What's included in the rental price?</summary>
+          <div class="faq-answer">All properties come fully furnished with premium linens, towels, kitchen essentials, Wi-Fi, and smart TV access. For Group Living, utilities and cleaning are also included in one flat monthly rate.</div>
+        </details>
+        <details class="faq-item reveal reveal-delay-2">
+          <summary class="faq-question">How do I book a property?</summary>
+          <div class="faq-answer">You can book through Airbnb, VRBO, or directly through us. Direct bookings often receive the best rates since there are no OTA service fees. Simply fill out the inquiry form above or email bookings@travellir.com.</div>
+        </details>
+        <details class="faq-item reveal reveal-delay-3">
+          <summary class="faq-question">Are pets allowed?</summary>
+          <div class="faq-answer">Pet policies vary by property. Many of our properties are pet-friendly with prior approval. Please mention any pets in your inquiry and we'll match you with the right property.</div>
+        </details>
+        <details class="faq-item reveal reveal-delay-4">
+          <summary class="faq-question">What is Group Living?</summary>
+          <div class="faq-answer">Group Living by Travellir offers private, furnished rooms in shared luxury residences across South Florida. It's ideal for professionals, travelers, and relocators who want a hassle-free, community-oriented living experience with flexible month-to-month leases.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+  <script src="shared.js"></script>
+  <script>
+  /* Contact Form Logic */
+  (function() {
+    'use strict';
+
+    // Pre-fill property interest from URL params
+    var params = new URLSearchParams(window.location.search);
+    var interest = params.get('interest');
+    if (interest) {
+      var select = document.getElementById('form-property');
+      if (select) {
+        for (var i = 0; i < select.options.length; i++) {
+          if (select.options[i].value === interest) {
+            select.selectedIndex = i;
+            break;
+          }
+        }
+      }
+    }
+
+    // Form submission via mailto
+    var btn = document.getElementById('form-submit-btn');
+    if (btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var name = (document.getElementById('form-name') || {}).value || '';
+        var email = (document.getElementById('form-email') || {}).value || '';
+        var property = (document.getElementById('form-property') || {}).value || 'Any';
+        var type = (document.getElementById('form-type') || {}).value || 'Not specified';
+        var checkin = (document.getElementById('form-checkin') || {}).value || 'TBD';
+        var checkout = (document.getElementById('form-checkout') || {}).value || 'TBD';
+        var message = (document.getElementById('form-message') || {}).value || '';
+
+        var subject = encodeURIComponent('Travellir Booking Inquiry — ' + (property || 'General'));
+        var body = encodeURIComponent(
+          'Name: ' + name + '\n' +
+          'Email: ' + email + '\n' +
+          'Property: ' + property + '\n' +
+          'Stay Type: ' + type + '\n' +
+          'Check-In: ' + checkin + '\n' +
+          'Check-Out: ' + checkout + '\n' +
+          'Message: ' + message
+        );
+        window.location.href = 'mailto:bookings@travellir.com?subject=' + subject + '&body=' + body;
+      });
+    }
+  })();
+  </script>
+</body>
+</html>

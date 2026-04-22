@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Details — Travellir Premier Rentals</title>
+  <meta name="description" content="View property details, amenities, and availability. Book your stay with Travellir Premier Rentals.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/webp" href="assets/images/logo.webp">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <section class="section" style="padding-top:calc(var(--header-height) + var(--space-2xl));">
+    <div class="container">
+      <!-- Back link -->
+      <a href="properties.html" class="btn btn--outline" style="margin-bottom:var(--space-xl);display:inline-flex;font-size:0.82rem;padding:10px 20px;border-color:var(--dark-20);color:var(--dark-60);">
+        ← Back to Properties
+      </a>
+
+      <div id="property-detail" class="property-detail">
+        <!-- Content loaded by JS based on ?id= param -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Hostfully Booking Widget Placeholder -->
+  <section class="section" id="booking" style="padding-top:0;">
+    <div class="container">
+      <div class="reveal" style="background:linear-gradient(135deg,var(--navy-900),var(--navy-800));border:1px solid var(--white-10);border-radius:var(--radius-xl);padding:var(--space-2xl);text-align:center;">
+        <h3 style="font-family:var(--font-display);font-size:1.5rem;color:var(--white);margin-bottom:var(--space-sm);">Book This Property</h3>
+        <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:var(--space-xl);">Check availability and pricing — powered by Hostfully.</p>
+        <div id="hostfully-booking-widget" style="min-height:200px;display:flex;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,0.12);border-radius:var(--radius-lg);padding:var(--space-2xl);">
+          <div style="text-align:center;">
+            <p style="color:rgba(255,255,255,0.35);font-size:0.85rem;margin-bottom:var(--space-md);">Hostfully booking calendar will appear here</p>
+            <a href="contact.html" class="btn btn--primary">Inquire to Book</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+  <script src="shared.js"></script>
+  <script>
+  /* Property Detail Page Logic */
+  (function() {
+    'use strict';
+    const PROPERTIES = {
+      'pink-suite': {
+        title: 'The Pink Suite Experience',
+        location: 'West Virginia',
+        image: 'assets/images/property-pink.webp',
+        price: '$110',
+        rating: '5.0',
+        beds: '2 Beds', baths: '1 Bath', guests: '4 Guests',
+        types: 'STR / MTR',
+        description: 'An Instagram-worthy retreat with curated neon signs, lush greenery walls, and ultra-plush furnishings. Perfect for couples, content creators, and anyone craving a memorable, one-of-a-kind escape.',
+        amenities: ['Wi-Fi', 'Smart TV', 'Full Kitchen', 'Air Conditioning', 'Washer/Dryer', 'Free Parking', 'Neon Lighting', 'Ring Camera Security'],
+        rules: ['No smoking', 'No parties or events', 'Check-in after 4 PM', 'Check-out before 11 AM', 'Pets allowed with approval']
+      },
+      'rustic-studio': {
+        title: 'The Rustic Studio Retreat',
+        location: 'West Virginia',
+        image: 'assets/images/property-studio.webp',
+        price: '$95',
+        rating: '4.9',
+        beds: '1 Bed', baths: '1 Bath', guests: '2 Guests',
+        types: 'STR / MTR',
+        description: 'A cozy open-concept studio with exposed wood accent wall, premium linens, and a fully equipped kitchen. Ideal for solo travelers and couples seeking a serene mountain getaway.',
+        amenities: ['Wi-Fi', 'Smart TV', 'Kitchenette', 'Air Conditioning', 'Free Parking', 'Mountain Views'],
+        rules: ['No smoking', 'No parties', 'Check-in after 3 PM', 'Check-out before 11 AM']
+      },
+      'mountain-loft': {
+        title: 'Mountain View Downtown Loft',
+        location: 'West Virginia',
+        image: 'assets/images/property-loft.webp',
+        price: '$85',
+        rating: '4.8',
+        beds: '1 Bed', baths: '1 Bath', guests: '3 Guests',
+        types: 'STR / MTR / LTR',
+        description: 'Bright panoramic loft in the heart of downtown with stunning mountain views. Walk to restaurants, shops, and local attractions. Perfect for remote workers and extended stays.',
+        amenities: ['Wi-Fi', 'Smart TV', 'Full Kitchen', 'Air Conditioning', 'Downtown Location', 'Mountain Views', 'Workspace'],
+        rules: ['No smoking', 'No parties', 'Check-in after 4 PM', 'Check-out before 11 AM']
+      },
+      'wv-ranch': {
+        title: 'The WV Rustic Ranch',
+        location: 'West Virginia',
+        image: 'assets/images/property-rustic.webp',
+        price: '$145',
+        rating: '4.9',
+        beds: '3 Beds', baths: '2 Baths', guests: '6 Guests',
+        types: 'STR / LTR',
+        description: 'A spacious ranch-style home with leather furnishings, a warm rustic aesthetic, and room for the whole family. Features a large backyard, full kitchen, and multiple living areas.',
+        amenities: ['Wi-Fi', 'Smart TV', 'Full Kitchen', 'Air Conditioning', 'Washer/Dryer', 'Free Parking', 'Backyard', 'Fire Pit'],
+        rules: ['No smoking indoors', 'No parties over 8 guests', 'Check-in after 4 PM', 'Check-out before 11 AM', 'Pets allowed']
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const prop = PROPERTIES[id];
+    const container = document.getElementById('property-detail');
+
+    if (!prop) {
+      container.innerHTML = '<div style="text-align:center;padding:var(--space-4xl) 0;"><h2 class="heading-section">Property Not Found</h2><p class="text-body" style="margin:var(--space-md) 0;">The property you\'re looking for doesn\'t exist or has been removed.</p><a href="properties.html" class="btn btn--primary">Browse All Properties</a></div>';
+      document.title = 'Property Not Found — Travellir';
+      return;
+    }
+
+    document.title = prop.title + ' — Travellir Premier Rentals';
+
+    container.innerHTML = `
+      <div class="property-detail__grid">
+        <div class="property-detail__gallery reveal">
+          <img src="${prop.image}" alt="${prop.title}" class="property-detail__main-image">
+          <div class="property-detail__badges">
+            <span class="property-card__badge-item">${prop.types}</span>
+          </div>
+        </div>
+        <div class="property-detail__info reveal">
+          <div class="property-card__location" style="margin-bottom:var(--space-sm);">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${prop.location}
+          </div>
+          <h1 style="font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weight:600;color:var(--dark);margin-bottom:var(--space-md);">${prop.title}</h1>
+          
+          <div style="display:flex;gap:var(--space-lg);margin-bottom:var(--space-lg);flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.95rem;color:var(--dark-60);">🛏 ${prop.beds}</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.95rem;color:var(--dark-60);">🛁 ${prop.baths}</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.95rem;color:var(--dark-60);">👥 ${prop.guests}</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.95rem;color:var(--gold-600);">⭐ ${prop.rating}</div>
+          </div>
+
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:var(--space-xl);">
+            <span style="font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--navy-700);">${prop.price}</span>
+            <span style="font-size:0.9rem;color:var(--dark-40);">/ night</span>
+          </div>
+
+          <p style="font-size:0.95rem;line-height:1.8;color:var(--dark-60);margin-bottom:var(--space-xl);">${prop.description}</p>
+
+          <div style="margin-bottom:var(--space-xl);">
+            <h3 style="font-family:var(--font-body);font-size:0.85rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dark-40);margin-bottom:var(--space-md);">Amenities</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+              ${prop.amenities.map(a => '<div style="display:flex;align-items:center;gap:8px;font-size:0.88rem;color:var(--dark-60);padding:10px 14px;background:var(--cream);border-radius:var(--radius-md);">✓ ' + a + '</div>').join('')}
+            </div>
+          </div>
+
+          <div style="margin-bottom:var(--space-xl);">
+            <h3 style="font-family:var(--font-body);font-size:0.85rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dark-40);margin-bottom:var(--space-md);">House Rules</h3>
+            <ul style="list-style:none;padding:0;">
+              ${prop.rules.map(r => '<li style="font-size:0.88rem;color:var(--dark-60);padding:8px 0;border-bottom:1px solid var(--dark-06);">• ' + r + '</li>').join('')}
+            </ul>
+          </div>
+
+          <div style="display:flex;gap:var(--space-md);flex-wrap:wrap;">
+            <a href="#booking" class="btn btn--primary">Book This Property</a>
+            <a href="contact.html" class="btn btn--outline" style="border-color:var(--navy-400);color:var(--navy-500);">Send Inquiry</a>
+          </div>
+        </div>
+      </div>`;
+  })();
+  </script>
+</body>
+</html>
