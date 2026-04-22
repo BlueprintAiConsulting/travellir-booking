@@ -2743,12 +2743,110 @@ ul, ol { list-style: none; }
 }
 
 /* ---------- Mobile overrides for new pages ---------- */
-@media (max-width: 480px) {
-  .page-hero { padding-top: calc(var(--header-height-sm) + var(--space-2xl)); padding-bottom: var(--space-xl); }
+
+/* ---- Tablet (768px) for multi-page components ---- */
+@media (max-width: 768px) {
+  .page-hero {
+    padding-top: calc(var(--header-height-sm) + var(--space-2xl));
+    padding-bottom: var(--space-xl);
+  }
+
+  .page-hero .heading-section {
+    font-size: clamp(1.8rem, 7vw, 2.6rem) !important;
+  }
+
+  /* Contact grid stacks on mobile */
+  .contact-grid { grid-template-columns: 1fr; }
+  .contact-form { padding: var(--space-lg); }
+
+  /* Property detail stacks */
+  .property-detail__grid { grid-template-columns: 1fr; }
+  .property-detail__main-image { height: 240px; }
+
+  /* Hostfully search stacks */
   .hostfully-search__fields { flex-direction: column; }
   .hostfully-search__field { min-width: 100%; }
   .hostfully-search__inner { padding: var(--space-lg) var(--space-md); }
-  .contact-form { padding: var(--space-lg); }
-  .gl-card__image { height: 160px; }
+  .hostfully-search__btn { width: 100%; min-height: 52px; }
+
+  /* GL cards full-width */
+  .gl-card__footer { flex-direction: column; align-items: flex-start; gap: var(--space-sm); }
+
+  /* FAQ touch targets */
+  .faq-question {
+    padding: var(--space-md) var(--space-lg);
+    min-height: 52px;
+    font-size: 0.9rem;
+  }
+  .faq-answer { padding: 0 var(--space-lg) var(--space-md); font-size: 0.88rem; }
+
+  /* About page: founder section */
+  .experience .container { gap: var(--space-xl); }
+
+  /* Contact sidebar badges */
+  .contact-badge { min-height: 44px; display: flex; align-items: center; font-size: 0.92rem; }
+  .contact-info-value { min-height: 44px; display: flex; align-items: center; }
+
+  /* Properties page filter bar with safe scroll */
+  .properties__header { text-align: center; }
 }
 
+/* ---- Small mobile (480px) ---- */
+@media (max-width: 480px) {
+  .page-hero {
+    padding-top: calc(var(--header-height-sm) + var(--space-xl));
+    padding-bottom: var(--space-lg);
+  }
+
+  .page-hero .heading-section {
+    font-size: clamp(1.5rem, 8vw, 2rem) !important;
+  }
+
+  .page-hero .text-body {
+    font-size: 0.9rem !important;
+  }
+
+  /* Contact form compact */
+  .contact-form { padding: var(--space-md); border-radius: var(--radius-lg); }
+  .contact-form .form-input,
+  .contact-form .form-select {
+    min-height: 48px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+  .contact-form textarea.form-input { min-height: 80px; }
+  .contact-info-card { padding: var(--space-md); }
+
+  /* GL cards compact */
+  .gl-card__image { height: 160px; }
+  .gl-card__body { padding: var(--space-md); }
+  .gl-card__title { font-size: 1.15rem; }
+  .gl-card__desc { font-size: 0.85rem; }
+  .gl-card__amenities span { font-size: 0.72rem; }
+  .gl-card__price-value { font-size: 1.3rem; }
+
+  /* Property detail compact */
+  .property-detail__main-image { height: 200px; border-radius: var(--radius-lg); }
+  .property-detail__badges { flex-wrap: wrap; }
+
+  /* FAQ compact */
+  .faq-question { padding: var(--space-sm) var(--space-md); font-size: 0.85rem; }
+  .faq-answer { padding: 0 var(--space-md) var(--space-sm); font-size: 0.85rem; }
+
+  /* About founder avatar */
+  #team .heading-section { font-size: clamp(1.5rem, 8vw, 2rem) !important; }
+
+  /* Contact market items */
+  .contact-market { font-size: 0.85rem; min-height: 44px; }
+
+  /* Hostfully search compact */
+  .hostfully-search { padding-top: var(--space-md); padding-bottom: var(--space-md); }
+}
+
+/* ---- Extra small (360px — iPhone SE, older devices) ---- */
+@media (max-width: 360px) {
+  .page-hero .heading-section { font-size: 1.4rem !important; }
+  .gl-card__image { height: 130px; }
+  .contact-form h2 { font-size: 1.2rem !important; }
+  .faq-question { font-size: 0.82rem; }
+  .contact-badge { font-size: 0.82rem; padding: var(--space-xs) var(--space-sm); }
+}
