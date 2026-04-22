@@ -9,7 +9,7 @@
 
 /* ---------- CSS Custom Properties ---------- */
 :root {
-  /* Brand Palette — Navy & Champagne Gold */
+  /* Brand Palette — Navy & Red (2026 Rebrand) */
   --navy-950: #070E1A;
   --navy-900: #0B1526;
   --navy-800: #111E35;
@@ -19,14 +19,14 @@
   --navy-400: #3A5A8A;
   --navy-300: #5A7FAD;
 
-  --gold-700: #6B4F0A;
-  --gold-600: #8C6914;
-  --gold-500: #B8922A;
-  --gold-400: #C9A84C;
-  --gold-300: #D9BF70;
-  --gold-200: #EBD8A0;
-  --gold-100: #F7F0DA;
-  --gold-50:  #FDFAF0;
+  --gold-700: #8B1A1A;
+  --gold-600: #B22222;
+  --gold-500: #CC2929;
+  --gold-400: #D43D3D;
+  --gold-300: #E06060;
+  --gold-200: #F0A0A0;
+  --gold-100: #FBE6E6;
+  --gold-50:  #FFF5F5;
 
   --champagne:    #F2E8C9;
   --cream:        #FAF8F3;
@@ -91,8 +91,8 @@
   --shadow-lg:    0 12px 40px rgba(0,0,0,0.14);
   --shadow-xl:    0 24px 60px rgba(0,0,0,0.18);
   --shadow-2xl:   0 40px 80px rgba(0,0,0,0.24);
-  --shadow-gold:  0 6px 30px rgba(185,146,42,0.30);
-  --shadow-gold-lg: 0 16px 60px rgba(185,146,42,0.22);
+  --shadow-gold:  0 6px 30px rgba(204,41,41,0.30);
+  --shadow-gold-lg: 0 16px 60px rgba(204,41,41,0.22);
   --shadow-navy:  0 6px 30px rgba(11,21,38,0.40);
   --shadow-navy-lg: 0 20px 60px rgba(11,21,38,0.50);
   --shadow-inner: inset 0 1px 3px rgba(0,0,0,0.12);
@@ -159,7 +159,7 @@ ul, ol { list-style: none; }
 
 ::selection {
   background: var(--gold-400);
-  color: var(--navy-900);
+  color: var(--white);
 }
 
 /* ---------- Typography ---------- */
@@ -368,14 +368,12 @@ ul, ol { list-style: none; }
   height: 46px;
   width: auto;
   transition: height var(--duration-normal) var(--ease-out), filter var(--duration-normal);
-  mix-blend-mode: luminosity;
-  filter: brightness(1.2) contrast(1.05) drop-shadow(0 1px 8px rgba(201,168,76,0.18));
+  filter: drop-shadow(0 1px 8px rgba(0,0,0,0.12));
 }
 
 .header--scrolled .header__logo {
   height: 38px;
-  mix-blend-mode: normal;
-  filter: brightness(1.08) drop-shadow(0 1px 6px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 1px 6px rgba(0,0,0,0.3));
 }
 
 .header__nav {
