@@ -291,7 +291,7 @@
         <a href="index.html" aria-label="Travellir Home" class="header__logo-link" id="header-logo">
           <svg viewBox="0 0 320 60" class="header__logo" xmlns="http://www.w3.org/2000/svg">
             <text x="0" y="48" font-family="'Cormorant Garamond','DM Serif Display',Georgia,serif" font-size="52" font-weight="700">
-              <tspan fill="#111E35">Travell</tspan><tspan fill="#CC2929">ir</tspan>
+              <tspan fill="#FFFFFF">Travell</tspan><tspan fill="#CC2929">ir</tspan>
             </text>
             <g transform="translate(232,2)" fill="#CC2929">
               <circle cx="20" cy="20" r="18" fill="none" stroke="#CC2929" stroke-width="2.5"/>
