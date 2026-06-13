@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-13T07:00:00Z",
+  "title": "Design System: Travellir — Premier Rentals",
+  "extensions": {
+    "colorMeta": {
+      "navy-deepest": {
+        "role": "primary",
+        "displayName": "Near-Black Navy",
+        "canonical": "#070E1A",
+        "tonalRamp": ["#020508", "#070E1A", "#0B1526", "#111E35", "#182844", "#1E3254", "#254068", "#3A5A8A"]
+      },
+      "navy": {
+        "role": "primary",
+        "displayName": "Midnight Navy",
+        "canonical": "#111E35",
+        "tonalRamp": ["#040B18", "#070E1A", "#0B1526", "#111E35", "#182844", "#1E3254", "#254068", "#3A5A8A"]
+      },
+      "gold": {
+        "role": "secondary",
+        "displayName": "Champagne Gold",
+        "canonical": "#C9A84C",
+        "tonalRamp": ["#3D2D05", "#6B4F0A", "#8C6914", "#B8922A", "#C9A84C", "#D9BF70", "#EBD8A0", "#F7F0DA"]
+      },
+      "ivory": {
+        "role": "neutral",
+        "displayName": "Warm Ivory",
+        "canonical": "#FEFCF7",
+        "tonalRamp": ["#E8E4DC", "#F0EBE0", "#F2E8C9", "#F5F0E5", "#FAF8F3", "#FDFAF0", "#FEFCF7", "#FFFFFF"]
+      },
+      "red-brand": {
+        "role": "tertiary",
+        "displayName": "Brand Red",
+        "canonical": "#C94040",
+        "tonalRamp": ["#5C1010", "#8B2020", "#A83030", "#C94040", "#D96060", "#E88888", "#F5BBBB", "#FDE8E8"]
+      },
+      "dark": {
+        "role": "neutral",
+        "displayName": "Near-Black",
+        "canonical": "#0E0E0E",
+        "tonalRamp": ["#0E0E0E", "#1A1A1A", "#2C2C2C", "#404040", "#606060", "#808080", "#B0B0B0", "#E0E0E0"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headlines only. Cormorant Garamond in 600 weight; italic variant for the accented line." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings (h2). Fluid scale from 2.2rem to 3.4rem." },
+      "title": { "displayName": "Title", "purpose": "Card headings, modal titles, sub-section labels. Fixed 1.35rem." },
+      "body": { "displayName": "Body", "purpose": "All prose. Inter only. 65–75ch max line length." },
+      "label": { "displayName": "Label", "purpose": "Uppercase kickers, nav links, badge text. One per section max." }
+    },
+    "shadows": [
+      { "name": "shadow-sm",      "value": "0 2px 8px rgba(0,0,0,0.08)",             "purpose": "Cards at rest. Default surface elevation." },
+      { "name": "shadow-md",      "value": "0 6px 20px rgba(0,0,0,0.10)",            "purpose": "Modals, dropdowns." },
+      { "name": "shadow-lg",      "value": "0 12px 40px rgba(0,0,0,0.14)",           "purpose": "Panels, sidesheets." },
+      { "name": "shadow-xl",      "value": "0 24px 60px rgba(0,0,0,0.18)",           "purpose": "Property cards on hover — the invitation state." },
+      { "name": "shadow-2xl",     "value": "0 40px 80px rgba(0,0,0,0.24)",           "purpose": "Hero overlays, full-page dark scenes." },
+      { "name": "shadow-gold",    "value": "0 6px 30px rgba(185,146,42,0.30)",       "purpose": "Gold CTA buttons at rest." },
+      { "name": "shadow-gold-lg", "value": "0 16px 60px rgba(185,146,42,0.22)",      "purpose": "Gold buttons on hover — broader and softer." },
+      { "name": "shadow-navy",    "value": "0 6px 30px rgba(11,21,38,0.40)",         "purpose": "Navy buttons at rest." }
+    ],
+    "motion": [
+      { "name": "ease-out",    "value": "cubic-bezier(0.16, 1, 0.3, 1)",    "purpose": "Default easing. Fast deceleration — feels snappy and premium." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.65, 0, 0.35, 1)",   "purpose": "Transitions with symmetric entry and exit. Nav color shifts." },
+      { "name": "ease-spring", "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Micro-interactions with slight overshoot (favorite button scale). Do not use for layout transitions." },
+      { "name": "duration-fast",   "value": "150ms", "purpose": "Hover state color transitions, icon fills." },
+      { "name": "duration-normal", "value": "300ms", "purpose": "Card lifts, button hover, most interactive transitions." },
+      { "name": "duration-slow",   "value": "500ms", "purpose": "Nav scroll state transition, page-level layout changes." },
+      { "name": "duration-slower", "value": "800ms", "purpose": "Hero image zoom, entrance reveal animations." }
+    ],
+    "breakpoints": [
+      { "name": "mobile",  "value": "768px",  "purpose": "Sidebar collapses to overlay; hero goes single-column." },
+      { "name": "tablet",  "value": "1024px", "purpose": "Property grid shifts from 3 to 2 columns." },
+      { "name": "desktop", "value": "1320px", "purpose": "Max content width (--max-width)." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (Gold)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main booking CTA. Pill-shaped, gold gradient, lifts on hover.",
+      "html": "<button class=\"ds-btn-primary\">Book Direct &amp; Save</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 36px; font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #0B1526; background: linear-gradient(135deg, #C9A84C 0%, #D9BF70 100%); border: none; border-radius: 9999px; box-shadow: 0 6px 30px rgba(185,146,42,0.30); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; white-space: nowrap; } .ds-btn-primary::before { content: ''; position: absolute; inset: 0; opacity: 0; background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent); transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 60px rgba(185,146,42,0.22); } .ds-btn-primary:hover::before { opacity: 1; } .ds-btn-primary:active { transform: translateY(0); } .ds-btn-primary:focus-visible { outline: 3px solid rgba(201,168,76,0.60); outline-offset: 3px; }"
+    },
+    {
+      "name": "Navy Button",
+      "kind": "button",
+      "refersTo": "button-navy",
+      "description": "Secondary CTA on light surfaces or as a dark complement to gold.",
+      "html": "<button class=\"ds-btn-navy\">Explore Properties</button>",
+      "css": ".ds-btn-navy { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 36px; font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF; background: linear-gradient(135deg, #182844, #111E35); border: none; border-radius: 9999px; box-shadow: 0 6px 30px rgba(11,21,38,0.40); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-navy:hover { transform: translateY(-2px); box-shadow: 0 20px 60px rgba(11,21,38,0.50); } .ds-btn-navy:active { transform: translateY(0); } .ds-btn-navy:focus-visible { outline: 3px solid rgba(201,168,76,0.60); outline-offset: 3px; }"
+    },
+    {
+      "name": "Outline Button (on dark)",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action in dark (hero/navy) contexts. Glass-tinted.",
+      "html": "<button class=\"ds-btn-outline\">Learn More</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 36px; font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF; background: transparent; border: 1px solid rgba(255,255,255,0.35); border-radius: 9999px; backdrop-filter: blur(12px); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-outline:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.70); transform: translateY(-2px); } .ds-btn-outline:focus-visible { outline: 3px solid rgba(255,255,255,0.50); outline-offset: 3px; }"
+    },
+    {
+      "name": "Property Card",
+      "kind": "card",
+      "refersTo": "property-card",
+      "description": "The brand's primary content unit. White surface, generous radius, dramatic hover lift.",
+      "html": "<article class=\"ds-property-card\"><div class=\"ds-property-card__image\"><img src=\"\" alt=\"Mountain retreat, West Virginia\" loading=\"lazy\"><div class=\"ds-property-card__overlay\"></div><div class=\"ds-property-card__badge\"><span class=\"ds-property-card__badge-item\">STR / MTR</span></div></div><div class=\"ds-property-card__body\"><p class=\"ds-property-card__location\">West Virginia</p><h3 class=\"ds-property-card__title\">The Pink Suite Experience</h3><p class=\"ds-property-card__desc\">An Instagram-worthy retreat with curated neon signs and ultra-plush furnishings.</p></div></article>",
+      "css": ".ds-property-card { background: #FFFFFF; border-radius: 28px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid rgba(14,14,14,0.06); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-property-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(0,0,0,0.18); border-color: transparent; } .ds-property-card__image { height: 260px; overflow: hidden; position: relative; background: #F5F0E5; } .ds-property-card__image img { width: 100%; height: 100%; object-fit: cover; transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-property-card:hover .ds-property-card__image img { transform: scale(1.06); } .ds-property-card__overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(7,14,26,0.30) 100%); pointer-events: none; } .ds-property-card__badge { position: absolute; top: 16px; left: 16px; } .ds-property-card__badge-item { background: rgba(7,14,26,0.75); backdrop-filter: blur(12px); color: #D9BF70; padding: 5px 12px; border-radius: 9999px; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid rgba(201,168,76,0.18); } .ds-property-card__body { padding: 32px; } .ds-property-card__location { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #B8922A; margin-bottom: 8px; } .ds-property-card__title { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 1.35rem; line-height: 1.3; color: #111E35; margin-bottom: 10px; } .ds-property-card__desc { font-family: 'Inter', sans-serif; font-size: 0.875rem; line-height: 1.6; color: rgba(14,14,14,0.60); }"
+    },
+    {
+      "name": "Form Input (on dark)",
+      "kind": "input",
+      "refersTo": null,
+      "description": "Search and contact form inputs — appear on navy/dark backgrounds.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field__label\">Check-In</label><input class=\"ds-input\" type=\"date\" placeholder=\"Select date\"></div>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; } .ds-field__label { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.50); } .ds-input { padding: 12px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #FFFFFF; font-family: 'Inter', sans-serif; font-size: 0.88rem; line-height: 1.5; outline: none; width: 100%; transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-input::placeholder { color: rgba(255,255,255,0.30); } .ds-input:focus { border-color: #C9A84C; background: rgba(255,255,255,0.12); box-shadow: 0 0 0 3px rgba(201,168,76,0.15); }"
+    },
+    {
+      "name": "Navigation (scrolled state)",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Fixed header. Transparent on load; dark glass on scroll. Gold underline on active/hover.",
+      "html": "<nav class=\"ds-nav ds-nav--scrolled\"><div class=\"ds-nav__logo\">Travellir</div><div class=\"ds-nav__links\"><a class=\"ds-nav__link ds-nav__link--active\" href=\"#\">Properties</a><a class=\"ds-nav__link\" href=\"#\">About</a><a class=\"ds-nav__link\" href=\"#\">Contact</a></div><button class=\"ds-btn-primary ds-nav__cta\" style=\"padding:10px 24px;font-size:0.78rem;\">Book Direct</button></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 72px; background: rgba(7,14,26,0.88); backdrop-filter: blur(28px) saturate(200%); box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.3); } .ds-nav__logo { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.1rem; color: #FFFFFF; letter-spacing: -0.01em; } .ds-nav__links { display: flex; gap: 48px; } .ds-nav__link { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.70); letter-spacing: 0.08em; text-transform: uppercase; position: relative; padding: 4px 0; text-decoration: none; transition: color 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav__link::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: linear-gradient(90deg, #C9A84C, #D9BF70); transition: width 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav__link:hover, .ds-nav__link--active { color: #FFFFFF; } .ds-nav__link:hover::after, .ds-nav__link--active::after { width: 100%; }"
+    },
+    {
+      "name": "Ornament Divider",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Brand signature decorative element. Appears between section label and section heading. Use once per section.",
+      "html": "<div class=\"ds-ornament\"><span class=\"ds-ornament__line\"></span><span class=\"ds-ornament__icon\">✦</span><span class=\"ds-ornament__line\"></span></div>",
+      "css": ".ds-ornament { display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 32px; } .ds-ornament__line { flex: 1; max-width: 80px; height: 1px; background: linear-gradient(90deg, transparent, #C9A84C, transparent); } .ds-ornament__icon { font-size: 1rem; color: #B8922A; line-height: 1; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Art of Arrival",
+    "overview": "Travellir's design system is built around one feeling: the moment you arrive somewhere you chose wisely. Not the anxiety of the search, not the hedge of the booking confirmation — the exhale of walking through a door and knowing you got it right. Every screen should carry that certainty.\n\nThe visual language is navy, ivory, and gold — the colors of a private club, a ship's logbook, a well-worn nautical chart. But the palette is directionally expanding: red joins white, navy, and gold to build a palette that reads as quintessentially American without waving a flag.\n\nThe tone throughout is confident restraint. Luxury isn't decorated here; it's expressed through generous spacing, photographic quality, and the absence of pressure. The guest should never feel sold to. They should feel discovered.",
+    "keyCharacteristics": [
+      "Deep navy grounds the brand in depth and trust; gold warms it into approachability",
+      "Cormorant Garamond carries the editorial weight of curation; Inter carries utility without competing",
+      "Pill-shaped buttons throughout — rounded, unhurried, tactile",
+      "Property cards with dramatic hover lift (-8px + shadow-xl) — each card is an invitation",
+      "Ornament dividers (✦) as the brand's signature decorative device",
+      "Cinematic noise texture and radial gold glows on dark surfaces; subtle, not decorative"
+    ],
+    "rules": [
+      { "name": "The Warmth Rule", "body": "Gold never appears without navy nearby. Used alone, gold reads as decoration. Anchored against deep navy, it reads as warmth.", "section": "colors" },
+      { "name": "The Arrival Rule", "body": "The palette transitions throughout a page: dark navy hero → ivory mid-sections → navy footer. The guest 'arrives in the light' and 'departs into depth.'", "section": "colors" },
+      { "name": "The One Serif Rule", "body": "Cormorant Garamond is the editorial voice. It appears in headlines only — never in body text, captions, nav, or form labels.", "section": "typography" },
+      { "name": "The Label Ceiling", "body": "Uppercase tracked labels (.text-label) may appear once per section as a named, deliberate system — not above every heading.", "section": "typography" },
+      { "name": "The State-Only Rule", "body": "Shadows escalate with interaction; they never appear on static decorative elements. Shadow growth is reserved for state change, not hierarchy decoration.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use navy (#111E35 or deeper) as the dark surface — not charcoal, not true black.",
+      "Do let imagery do the emotional work in hero sections. One decisive, place-specific photograph beats five generic ones.",
+      "Do use Cormorant Garamond for all headings and Inter for all body text and UI. Never swap.",
+      "Do give gold (#C9A84C) a warm shadow — shadow-gold. Gold on navy with no shadow reads flat.",
+      "Do write property copy as if a trusted friend is recommending the place. Specific, warm, first-person.",
+      "Do elevate red (#C94040) to a brand accent alongside gold — geographic markers, availability badges, high-emphasis moments.",
+      "Do use pill buttons (radius-full) for all primary CTAs.",
+      "Do vary section spacing for rhythm."
+    ],
+    "donts": [
+      "Don't design any screen that looks like it belongs on Marriott.com or any loyalty-program hotel site.",
+      "Don't design any screen that looks like an Airbnb or VRBO browse page.",
+      "Don't use gradient text (-webkit-background-clip: text) outside the hero display headline.",
+      "Don't use a .text-label kicker above more than one section heading per page.",
+      "Don't use side-stripe borders (border-left > 1px) as colored card accents.",
+      "Don't place identical card grids (same size, icon + heading + text) on any brand surface.",
+      "Don't use Inter in hero headlines or Cormorant Garamond in nav, labels, or form fields.",
+      "Don't use a warm cream/sand/beige body background — --ivory (#FEFCF7) is the correct page ground.",
+      "Don't let red appear without intention. #C94040 is reserved for errors and deliberate brand accents."
+    ]
+  }
+}
