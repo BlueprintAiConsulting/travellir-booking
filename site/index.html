@@ -57,20 +57,6 @@
           </a>
         </div>
 
-        <div class="hero__stats">
-          <div class="hero__stat">
-            <div class="hero__stat-value" id="stat-properties">41</div>
-            <div class="hero__stat-label">Properties</div>
-          </div>
-          <div class="hero__stat">
-            <div class="hero__stat-value" id="stat-rating">4.9</div>
-            <div class="hero__stat-label">Guest Rating</div>
-          </div>
-          <div class="hero__stat">
-            <div class="hero__stat-value" id="stat-states">3</div>
-            <div class="hero__stat-label">States</div>
-          </div>
-        </div>
       </div>
 
       <div class="hero__images">
@@ -103,22 +89,22 @@
   <!-- ========== TRUST BAR ========== -->
   <div class="trust-bar" id="trust-bar">
     <div class="container">
-      <span class="trust-bar__label">Featured On</span>
+      <span class="trust-bar__label">Why Book Direct</span>
       <div class="trust-bar__divider"></div>
       <div class="trust-bar__items">
         <div class="trust-bar__item">
           <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"/></svg>
-          Premier Managed
+          Personally Managed
         </div>
         <div class="trust-bar__divider"></div>
         <div class="trust-bar__item">
           <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"/></svg>
-          Book Direct &amp; Save
+          Best Rate Guaranteed
         </div>
         <div class="trust-bar__divider"></div>
         <div class="trust-bar__item">
           <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"/></svg>
-          Direct Booking Available
+          No OTA Fees
         </div>
         <div class="trust-bar__divider"></div>
         <div class="trust-bar__badge">
@@ -129,35 +115,18 @@
     </div>
   </div>
 
-  <!-- ========== HOSTFULLY SEARCH (Placeholder) ========== -->
-  <section class="section hostfully-search" id="hostfully-search">
+  <!-- ========== BROWSE CTA ========== -->
+  <section class="section hostfully-search" id="book-direct">
     <div class="container">
-      <div class="hostfully-search__inner reveal">
-        <h2 class="heading-section" style="font-size:1.6rem;margin-bottom:var(--space-sm);">Find Your Perfect Stay</h2>
-        <p class="text-body" style="margin-bottom:var(--space-xl);max-width:500px;margin-left:auto;margin-right:auto;">Search availability across all 41 properties — powered by Hostfully.</p>
-        <div class="hostfully-search__widget" id="hostfully-search-widget">
-          <!-- Hostfully search widget embed code goes here -->
-          <div class="hostfully-search__placeholder">
-            <div class="hostfully-search__fields">
-              <div class="hostfully-search__field">
-                <label>Location</label>
-                <select class="form-input"><option>All Markets</option><option>South Florida</option><option>West Virginia</option><option>Arizona</option></select>
-              </div>
-              <div class="hostfully-search__field">
-                <label>Check-In</label>
-                <input type="date" class="form-input">
-              </div>
-              <div class="hostfully-search__field">
-                <label>Check-Out</label>
-                <input type="date" class="form-input">
-              </div>
-              <div class="hostfully-search__field">
-                <label>Guests</label>
-                <select class="form-input"><option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4+ Guests</option></select>
-              </div>
-              <a href="properties.html" class="btn btn--primary hostfully-search__btn">Search</a>
-            </div>
-          </div>
+      <div class="hostfully-search__inner reveal" style="text-align:center;">
+        <h2 class="heading-section" style="max-width:580px;margin:0 auto var(--space-md);">Find Your Perfect Stay</h2>
+        <p class="text-body" style="max-width:480px;margin:0 auto var(--space-2xl);">41 hand-curated properties across South Florida, West Virginia, and Arizona — short stays, long stays, every stay extraordinary.</p>
+        <div style="display:flex;gap:var(--space-md);justify-content:center;flex-wrap:wrap;">
+          <a href="properties.html" class="btn btn--primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            Browse All 41 Properties
+          </a>
+          <a href="contact.html" class="btn btn--outline-dark">Get in Touch</a>
         </div>
       </div>
     </div>
@@ -288,7 +257,6 @@
     <div class="locations__glow locations__glow--2"></div>
     <div class="container">
       <div class="locations__header">
-        <p class="text-label reveal">Our Markets</p>
         <div class="ornament-divider reveal">
           <span class="ornament-divider__line" style="background: linear-gradient(90deg, transparent, rgba(201,168,76,0.5), transparent);"></span>
           <span class="ornament-divider__icon" style="color:var(--gold-300)">✦</span>
@@ -324,11 +292,12 @@
           </div>
         </div>
 
-        <div class="location-card reveal reveal-delay-2" id="location-az">
+        <div class="location-card location-card--coming-soon reveal reveal-delay-2" id="location-az">
           <div class="location-card__image">
             <img src="assets/images/property-loft.webp" alt="Arizona property" loading="lazy">
             <div class="location-card__image-overlay"></div>
           </div>
+          <span class="location-card__status">Coming Soon</span>
           <div class="location-card__icon">🌵</div>
           <h3 class="location-card__title">Arizona</h3>
           <p class="location-card__desc">Sun-drenched adventures in the heart of the Southwest. Launching 2026.</p>
@@ -347,7 +316,6 @@
         <div class="cta__noise"></div>
         <div class="cta__glow cta__glow--1"></div>
         <div class="cta__glow cta__glow--2"></div>
-        <p class="text-label">Ready to Book?</p>
         <h2 class="heading-section">Your Premier Stay<br>Is One Click Away</h2>
         <p class="text-body">Whether you're planning a weekend escape, a month-long work retreat, or a long-term home base — we have the perfect property waiting.</p>
         <div class="cta__actions" style="margin-top:var(--space-xl);">

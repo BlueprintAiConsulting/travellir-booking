@@ -54,7 +54,14 @@
   --dark-06:      rgba(14,14,14,0.06);
 
   --success: #2A8A56;
-  --error:   #C94040;
+
+  /* Brand Red — geographic markers, availability signals, high-emphasis moments */
+  --red-brand: #C94040;
+  --red-dark:  #A83232;
+  --red-light: rgba(201,64,64,0.10);
+  --shadow-red: 0 6px 24px rgba(201,64,64,0.22);
+
+  --error: var(--red-brand);
 
   /* Typography */
   --font-display: 'Cormorant Garamond', 'DM Serif Display', Georgia, serif;
@@ -603,9 +610,9 @@ ul, ol { list-style: none; }
 .hero__badge-dot {
   width: 7px;
   height: 7px;
-  background: var(--gold-400);
+  background: var(--red-brand);
   border-radius: 50%;
-  box-shadow: 0 0 6px var(--gold-400);
+  box-shadow: 0 0 6px var(--red-brand);
   animation: pulse 2.5s ease-in-out infinite;
 }
 
@@ -627,10 +634,7 @@ ul, ol { list-style: none; }
 .hero__title-accent {
   display: block;
   font-style: italic;
-  background: linear-gradient(115deg, var(--gold-300) 0%, var(--gold-400) 45%, var(--champagne) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--gold-300);
   position: relative;
 }
 
@@ -693,7 +697,7 @@ ul, ol { list-style: none; }
 
 .hero__stat-label {
   font-size: 0.72rem;
-  color: rgba(255,255,255,0.40);
+  color: rgba(255,255,255,0.65);
   margin-top: 6px;
   letter-spacing: 0.05em;
   font-weight: 500;
@@ -1095,7 +1099,7 @@ ul, ol { list-style: none; }
   display: flex;
   align-items: center;
   gap: 5px;
-  color: var(--gold-500);
+  color: var(--red-brand);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -1106,7 +1110,7 @@ ul, ol { list-style: none; }
 .property-card__location svg {
   width: 12px;
   height: 12px;
-  fill: var(--gold-500);
+  fill: var(--red-brand);
   flex-shrink: 0;
 }
 
@@ -1564,6 +1568,38 @@ ul, ol { list-style: none; }
   fill: none;
   stroke: var(--gold-400);
   stroke-width: 1.8;
+}
+
+/* Coming soon variant — Arizona card */
+.location-card--coming-soon {
+  border-color: rgba(201,64,64,0.15);
+}
+
+.location-card--coming-soon .location-card__icon {
+  background: rgba(201,64,64,0.12);
+  box-shadow: none;
+}
+
+.location-card--coming-soon .location-card__meta-item svg {
+  stroke: var(--red-brand);
+  opacity: 0.7;
+}
+
+.location-card--coming-soon .location-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  background: var(--red-brand);
+  color: #fff;
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-md);
+  position: relative;
+  z-index: 2;
 }
 
 /* ----------------------------------------
