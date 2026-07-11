@@ -214,43 +214,6 @@
     }
   }
 
-  // ---- Counter Animation ----
-  function animateCounters() {
-    const els = document.querySelectorAll('.hero__stat-value');
-
-    els.forEach(function (el) {
-      const text    = el.textContent.trim();
-      const match   = text.match(/[\d.]+/);
-      if (!match) return;
-
-      const target  = parseFloat(match[0]);
-      const suffix  = text.replace(match[0], '');
-      const isFloat = text.includes('.');
-      const dur     = 1800;
-      let   start   = null;
-
-      el.textContent = (isFloat ? '0.0' : '0') + suffix;
-
-      const obs = new IntersectionObserver(function (entries) {
-        if (!entries[0].isIntersecting) return;
-        obs.disconnect();
-
-        function step(ts) {
-          if (!start) start = ts;
-          const pct   = Math.min((ts - start) / dur, 1);
-          const eased = 1 - Math.pow(1 - pct, 3);
-          const val   = eased * target;
-          el.textContent = (isFloat ? val.toFixed(1) : Math.floor(val)) + suffix;
-          if (pct < 1) requestAnimationFrame(step);
-        }
-
-        requestAnimationFrame(step);
-      });
-
-      obs.observe(el);
-    });
-  }
-
   // ---- Review Card Gold Glow tilt on hover ----
   function setupReviewTilt() {
     document.querySelectorAll('.review-card').forEach(function (card) {
@@ -326,7 +289,6 @@
     setupPropertyCards();
     setupParallax();
     setupParticles();
-    animateCounters();
     setupReviewTilt();
     setupForm();
 

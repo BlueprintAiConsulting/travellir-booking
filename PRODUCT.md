@@ -8,11 +8,11 @@ brand
 
 **Primary surface (site/):** A mix of leisure travelers and extended-stay renters. Leisure guests are families, couples, and small groups booking weekend getaways or vacation stays — browsing on desktop or phone from home, drawn in by imagery and place. Extended-stay guests are remote workers, relocators, or traveling professionals booking 30–90 day stays across the three markets. Both share a desire for quality and reliability over novelty; they want to feel they've found something handpicked, not a marketplace listing.
 
-**Secondary surface (index.html):** Property managers and Travellir staff — internal tool users who need data density, fast navigation, and clear action paths across 41 properties.
+**Secondary surface (index.html):** Property managers and Travellir staff — internal tool users who need data density, fast navigation, and clear action paths across the portfolio.
 
 ## Product Purpose
 
-Travellir manages 41 curated short-term, mid-term, and long-term rental properties across West Virginia (mountains), Boca Raton FL (beaches), and Scottsdale AZ (desert). The public site's primary job is to convert browsers into direct bookings — bypassing OTAs with a "Book Direct & Save" proposition — and to establish the brand as a premium, trusted independent rental company. Booking is powered by Hostfully. Success on the brand site means a guest feels confident and excited enough to book without needing to cross-check elsewhere.
+Travellir manages curated short-term, mid-term, and long-term rental properties across West Virginia (mountains), Boca Raton FL (beaches), and Scottsdale AZ (desert). The public site's primary job is to convert browsers into direct bookings — bypassing OTAs with a "Book Direct & Save" proposition — and to establish the brand as a premium, trusted independent rental company. Booking is powered by Hostfully. Success on the brand site means a guest feels confident and excited enough to book without needing to cross-check elsewhere.
 
 ## Brand Personality
 
@@ -29,7 +29,7 @@ Three-word anchor: **curated · confident · human**
 
 1. **Place as protagonist.** West Virginia mountains, South Florida beaches, and Arizona desert are not filters — they are distinct identities. The design should make guests feel the place before they read the address.
 
-2. **Human at scale.** 41 properties managed with personal attention. The brand should feel like a trusted local host, not a scaled hospitality operation. Copy and design choices should reinforce that a real person has thought about each property.
+2. **Human at scale.** Every property managed with personal attention. The brand should feel like a trusted local host, not a scaled hospitality operation. Copy and design choices should reinforce that a real person has thought about each property.
 
 3. **Confident curation over exhaustive listing.** Show three properties beautifully before listing forty-one generically. Restraint signals taste; pressure signals desperation.
 

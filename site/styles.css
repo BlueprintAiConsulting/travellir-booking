@@ -656,53 +656,6 @@ ul, ol { list-style: none; }
   animation: fadeInUp 0.9s var(--ease-out) 0.65s both;
 }
 
-/* Hero stats bar */
-.hero__stats {
-  display: flex;
-  gap: 0;
-  margin-top: var(--space-3xl);
-  padding-top: var(--space-2xl);
-  border-top: 1px solid var(--white-10);
-  animation: fadeInUp 0.9s var(--ease-out) 0.8s both;
-}
-
-.hero__stat {
-  flex: 1;
-  text-align: center;
-  padding: 0 var(--space-lg);
-  position: relative;
-}
-
-.hero__stat:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-  height: 36px;
-  background: var(--white-10);
-}
-
-.hero__stat:first-child { padding-left: 0; text-align: left; }
-
-.hero__stat-value {
-  font-family: var(--font-display);
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--gold-300);
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.hero__stat-label {
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.65);
-  margin-top: 6px;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
-
 /* Hero image mosaic */
 .hero__images {
   display: grid;
@@ -2185,8 +2138,6 @@ ul, ol { list-style: none; }
   .hero__badge    { align-self: center; }
   .hero__subtitle { margin: 0 auto var(--space-2xl); max-width: 520px; }
   .hero__actions  { justify-content: center; }
-  .hero__stats    { justify-content: center; }
-  .hero__stat:first-child { text-align: center; padding-left: var(--space-lg); }
 
   .hero__images {
     max-width: 560px;
@@ -2289,9 +2240,6 @@ ul, ol { list-style: none; }
   .hero__img-wrapper:nth-child(3) { grid-column: 1 / -1; grid-row: 2; }
   .hero__img-wrapper:nth-child(4) { display: none; }
 
-  .hero__stat { padding: 0 var(--space-md); }
-  .hero__stats { gap: 0; flex-wrap: nowrap; }
-
   /* ── Properties filter tabs — horizontal scroll ── */
   .properties__filters {
     display: flex;
@@ -2374,8 +2322,6 @@ ul, ol { list-style: none; }
   .hero__subtitle { font-size: 0.93rem; }
   .hero__actions { flex-direction: column; align-items: stretch; gap: var(--space-sm); }
   .hero__actions .btn { width: 100%; max-width: none; justify-content: center; }
-  .hero__stat-value { font-size: 1.7rem; }
-  .hero__stats { justify-content: space-between; }
   .hero__scroll-cue { display: none; }
 
   .hero__images {
